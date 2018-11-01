@@ -36,47 +36,10 @@
 
 package account
 
-import (
-	"fmt"
-	"net/http"
-
-	"github.com/passw0rd/cli/client"
-	"github.com/pkg/errors"
-	"gopkg.in/urfave/cli.v2"
-)
-
-func Register(client *client.VirgilHttpClient) *cli.Command {
-	return &cli.Command{
-		Name:      "register",
-		Aliases:   []string{"reg"},
-		ArgsUsage: "email",
-		Usage:     "Registers a new account",
-		Action: func(context *cli.Context) error {
-			return registerFunc(context, client)
-		},
-	}
+type RegisterRequest struct {
+	Email string `json:"email"`
 }
-func registerFunc(context *cli.Context, vcli *client.VirgilHttpClient) error {
 
-	if context.NArg() < 1 {
-		return errors.New("invalid number of arguments")
-	}
-
-	email := context.Args().First()
-
-	req := &RegisterRequest{Email: email}
-
-	var resp *RegisterResponse
-
-	_, err := vcli.Send(http.MethodPut, "", "accounts/v1/account", req, &resp)
-
-	if err != nil {
-		return err
-	}
-
-	if resp != nil {
-		fmt.Println("Your token:", resp.Token)
-	}
-
-	return nil
+type RegisterResponse struct {
+	Token string `json:"access_token"`
 }

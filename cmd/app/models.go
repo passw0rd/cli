@@ -34,49 +34,24 @@
  * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  */
 
-package account
+package app
 
-import (
-	"fmt"
-	"net/http"
-
-	"github.com/passw0rd/cli/client"
-	"github.com/pkg/errors"
-	"gopkg.in/urfave/cli.v2"
-)
-
-func Register(client *client.VirgilHttpClient) *cli.Command {
-	return &cli.Command{
-		Name:      "register",
-		Aliases:   []string{"reg"},
-		ArgsUsage: "email",
-		Usage:     "Registers a new account",
-		Action: func(context *cli.Context) error {
-			return registerFunc(context, client)
-		},
-	}
+type CreateAppRequest struct {
+	Name string `json:"name"`
 }
-func registerFunc(context *cli.Context, vcli *client.VirgilHttpClient) error {
 
-	if context.NArg() < 1 {
-		return errors.New("invalid number of arguments")
-	}
+type CreateAppResponse struct {
+	ID        string `json:"id"`
+	Name      string `json:"name"`
+	PublicKey string `json:"public_key"`
+}
 
-	email := context.Args().First()
+type UpdateToken struct {
+	A []byte `json:"a"`
+	B []byte `json:"b"`
+}
 
-	req := &RegisterRequest{Email: email}
-
-	var resp *RegisterResponse
-
-	_, err := vcli.Send(http.MethodPut, "", "accounts/v1/account", req, &resp)
-
-	if err != nil {
-		return err
-	}
-
-	if resp != nil {
-		fmt.Println("Your token:", resp.Token)
-	}
-
-	return nil
+type RotateResponse struct {
+	Version     int          `json:"version"`
+	UpdateToken *UpdateToken `json:"update_token"`
 }

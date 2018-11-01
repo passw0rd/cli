@@ -34,49 +34,62 @@
  * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  */
 
-package account
+package demo
 
 import (
+	"encoding/base64"
 	"fmt"
-	"net/http"
 
-	"github.com/passw0rd/cli/client"
+	"github.com/passw0rd/sdk-go"
 	"github.com/pkg/errors"
 	"gopkg.in/urfave/cli.v2"
 )
 
-func Register(client *client.VirgilHttpClient) *cli.Command {
+func Verify() *cli.Command {
 	return &cli.Command{
-		Name:      "register",
-		Aliases:   []string{"reg"},
-		ArgsUsage: "email",
-		Usage:     "Registers a new account",
+		Name:      "verify",
+		Aliases:   []string{"v"},
+		ArgsUsage: "password record",
+		Usage:     "verify password against a record",
 		Action: func(context *cli.Context) error {
-			return registerFunc(context, client)
+			return verifyFunc(context)
 		},
 	}
 }
-func registerFunc(context *cli.Context, vcli *client.VirgilHttpClient) error {
+func verifyFunc(context *cli.Context) error {
 
-	if context.NArg() < 1 {
+	if context.NArg() < 2 {
 		return errors.New("invalid number of arguments")
 	}
 
-	email := context.Args().First()
+	token := context.String("token")
+	appId := context.String("appid")
+	pub := context.String("pk")
+	priv := context.String("sk")
+	pwd := context.Args().First()
+	recStr := context.Args().Get(1)
 
-	req := &RegisterRequest{Email: email}
-
-	var resp *RegisterResponse
-
-	_, err := vcli.Send(http.MethodPut, "", "accounts/v1/account", req, &resp)
-
+	rec, err := base64.StdEncoding.DecodeString(recStr)
 	if err != nil {
 		return err
 	}
 
-	if resp != nil {
-		fmt.Println("Your token:", resp.Token)
+	ctx, err := passw0rd.CreateContext(token, appId, priv, pub)
+	if err != nil {
+		return err
 	}
+
+	prot, err := passw0rd.NewProtocol(ctx)
+	if err != nil {
+		return err
+	}
+
+	key, err := prot.VerifyPassword(pwd, rec)
+	if err != nil {
+		return err
+	}
+
+	fmt.Printf("Encryption key: %x\n", key)
 
 	return nil
 }
