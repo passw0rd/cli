@@ -4,10 +4,14 @@ go: tip
 
 gobuild_args: -ldflags "-X main.Version=${TRAVIS_TAG} -X main.BuildTime=`date -u '+%Y-%m-%d_%I:%M:%S%p'` -X main.CommitId=${TRAVIS_COMMIT}"
 
+before_install:
+  go get ./...
+  go get -t ./...
+
 install: go build -o passw0rd
 
 script:
-  go get ./...
+
   go test ./...
 
 before_deploy:
