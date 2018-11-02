@@ -6,7 +6,9 @@ gobuild_args: -ldflags "-X main.Version=${TRAVIS_TAG} -X main.BuildTime=`date -u
 
 install: go build -o passw0rd
 
-script: go test ./...
+script:
+  go get ./...
+  go test ./...
 
 before_deploy:
 - PLATFORMS=(darwin/386 darwin/amd64 freebsd/386 freebsd/amd64 freebsd/arm linux/386 linux/amd64 linux/arm windows/386 windows/amd64)
