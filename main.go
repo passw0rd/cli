@@ -47,13 +47,19 @@ import (
 	"gopkg.in/urfave/cli.v2"
 )
 
+var Version string
+var BuildTime string
+var CommitId string
+
 func main() {
 
 	vcli := &client.VirgilHttpClient{
-		Address: "https://api.passw0rd.io/",
+		Address: "http://api.passw0rd.io/",
 	}
 
 	app := &cli.App{
+		Version: Version + " " + BuildTime + " commit " + CommitId,
+
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:    "token",
