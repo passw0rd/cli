@@ -5,7 +5,7 @@
 
 [Installation](#installation) | [Commands](#commands) | [Usage Examples](#usage-examples) | [Support](#support)
 
-<a href="https://passw0rd.io/"><img width="260px" src="https://cdn.virgilsecurity.com/assets/images/github/logos/passw0rd.png" align="left" hspace="0" vspace="0"></a>[Virgil Security](https://virgilsecurity.com) introduces to developers a **Passw0rd CLI** is an open source tool that provides commands for interacting with Passw0rd Service and Virgil Cloud. With minimal configuration, you can start using all of the functionality provided by the Passw0rd from your favorite terminal program.
+<a href="https://passw0rd.io/"><img width="260px" src="https://cdn.virgilsecurity.com/assets/images/github/logos/passw0rd.png" align="left" hspace="0" vspace="0"></a>[Virgil Security](https://virgilsecurity.com) introduces to developers a **Passw0rd CLI** is an open source tool that provides commands for interacting with the Passw0rd Service and Virgil Cloud. With minimal configuration, you can start using all of the functionality provided by the Passw0rd from your favorite terminal program.
 - **Linux shells** – Use common shell programs such as Bash, Zsh, and tsch to run commands in Linux, macOS, or Unix.
 - **Windows command line** – On Microsoft Windows, run commands in either PowerShell or the Windows Command Processor.
 
@@ -39,7 +39,7 @@ Using the Passw0rd CLI you can:
 
 To get more information run the Passw0rd CLI or its command with the `--help` or `-h` option, that displays full help list and available commands.
 
-> consequently, to get a help the run the following command: `./cli --help`. To get help using a command use the `--help` or `-h` option after the command, for example: `./cli account --help`.
+> Consequently, to get help run the following command: `./cli --help`. To get help using a command use the `--help` or `-h` option after the command, for example: `./cli account --help`.
 
 ## Usage Examples
 The Passw0rd CLI has the following usage syntax:
