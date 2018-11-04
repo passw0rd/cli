@@ -48,8 +48,6 @@ import (
 )
 
 var Version string
-var BuildTime string
-var CommitId string
 
 func main() {
 
@@ -58,7 +56,7 @@ func main() {
 	}
 
 	app := &cli.App{
-		Version:     Version + " " + BuildTime + " commit " + CommitId,
+		Version:     Version,
 		Description: "password.io client application",
 
 		Flags: []cli.Flag{
@@ -70,7 +68,6 @@ func main() {
 			},
 			&cli.StringFlag{
 				Name:    "appid",
-				Aliases: []string{"appId"},
 				Usage:   "App ID",
 				EnvVars: []string{"PASSW0RD_APP_ID"},
 			},

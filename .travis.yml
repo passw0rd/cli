@@ -9,6 +9,7 @@ script:
 
 before_deploy:
 - PLATFORMS=(darwin/amd64 freebsd/amd64 linux/amd64 windows/amd64)
+- APP_VERSION=${TRAVIS_TAG:-0.0.0-dev}+${TRAVIS_BUILD_NUMBER}.${TRAVIS_COMMIT:0:7}
 
 # build binary for all archs
 - |
@@ -18,9 +19,9 @@ before_deploy:
     GOARCH=${PLATFORM#*/}
 
     if [ "$GOOS" = "windows" ]; then
-      build_cmd="GOOS=$GOOS GOARCH=$GOARCH go build -o 'passw0rd.exe' -ldflags '-w -s -extldflags '-static' -X main.Version=${TRAVIS_TAG} -X main.BuildTime=`date -u '+%Y-%m-%d_%I:%M:%S%p'` -X main.CommitId=${TRAVIS_COMMIT}'"
+      build_cmd="GOOS=$GOOS GOARCH=$GOARCH go build -o 'passw0rd.exe' -ldflags '-w -s -extldflags '-static' -X main.Version==${APP_VERSION}'"
     else
-      build_cmd="CGO_ENABLED=0 GOOS=$GOOS GOARCH=$GOARCH go build -o passw0rd -ldflags '-w -s -extldflags '-static' -X main.Version=${TRAVIS_TAG} -X main.BuildTime=`date -u '+%Y-%m-%d_%I:%M:%S%p'` -X main.CommitId=${TRAVIS_COMMIT}'"
+      build_cmd="CGO_ENABLED=0 GOOS=$GOOS GOARCH=$GOARCH go build -o passw0rd -ldflags '-w -s -extldflags '-static' -X main.Version==${APP_VERSION}'"
     fi
     if ! eval $build_cmd; then
       echo "Failed building passw0rd for $PLATFORM" && return 1
