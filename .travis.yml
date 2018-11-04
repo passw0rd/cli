@@ -2,11 +2,9 @@ language: go
 
 go: tip
 
-gobuild_args: -ldflags "-X main.Version=${TRAVIS_TAG} -X main.BuildTime=`date -u '+%Y-%m-%d_%I:%M:%S%p'` -X main.CommitId=${TRAVIS_COMMIT}"
+gobuild_args: -ldflags "`-extldflags -static` -X main.Version=${TRAVIS_TAG} -X main.BuildTime=`date -u '+%Y-%m-%d_%I:%M:%S%p'` -X main.CommitId=${TRAVIS_COMMIT}"
 
 before_install: go get -t ./...
-
-install: go build -o passw0rd
 
 script:
   go test ./...
@@ -22,9 +20,9 @@ before_deploy:
     GOARCH=${PLATFORM#*/}
 
     if [ "$GOOS" = "windows" ]; then
-      build_cmd="GOOS=$GOOS GOARCH=$GOARCH go build -o passw0rd -ldflags '-w -s'"
+      build_cmd="GOOS=$GOOS GOARCH=$GOARCH go build -o passw0rd -ldflags '`-extldflags -static` -w -s'"
     else
-      build_cmd="CGO_ENABLED=0 GOOS=$GOOS GOARCH=$GOARCH go build -o passw0rd -ldflags '-d -w -s'"
+      build_cmd="CGO_ENABLED=0 GOOS=$GOOS GOARCH=$GOARCH go build -o passw0rd -ldflags '`-extldflags -static` -d -w -s'"
     fi
     if ! eval $build_cmd; then
       echo "Failed building passw0rd for $PLATFORM" && return 1
@@ -43,18 +41,12 @@ deploy:
   provider: releases
   api_key: $AUTH_TOKEN
   file:
-  - "passw0rd-darwin-386.tgz"
   - "passw0rd-darwin-amd64.tgz"
 
-  - "passw0rd-freebsd-386.tgz"
-  - "passw0rd-freebsd-arm.tgz"
   - "passw0rd-freebsd-amd64.tgz"
 
-  - "passw0rd-linux-386.tgz"
-  - "passw0rd-linux-arm.tgz"
   - "passw0rd-linux-amd64.tgz"
 
-  - "passw0rd-windows-386.zip"
   - "passw0rd-windows-amd64.zip"
 
   skip_cleanup: true
