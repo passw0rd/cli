@@ -68,7 +68,7 @@ func CreateFunc(context *cli.Context, vcli *client.VirgilHttpClient) error {
 	req := &CreateAppRequest{Name: name}
 	var resp *CreateAppResponse
 
-	_, err := vcli.Send(http.MethodPut, token, "accounts/v1/application", req, &resp)
+	_, err := vcli.Send(http.MethodPost, token, "accounts/v1/application", req, &resp)
 
 	if err != nil {
 		return err

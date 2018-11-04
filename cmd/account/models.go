@@ -41,5 +41,15 @@ type RegisterRequest struct {
 }
 
 type RegisterResponse struct {
-	Token string `json:"access_token"`
+	Token string `json:"confirmation_session_token"`
+}
+
+type ConfirmAccountReq struct {
+	Email                    string `json:"email"`
+	ConfirmationSessionToken string `json:"confirmation_session_token"`
+	ConfirmationCode         string `json:"confirmation_code"`
+}
+
+type ConfirmAccountResp struct {
+	AccessToken string `json:"access_token,omitempty"`
 }

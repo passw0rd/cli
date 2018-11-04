@@ -35,3 +35,54 @@
  */
 
 package account
+
+import (
+	"fmt"
+	"net/http"
+
+	"github.com/passw0rd/cli/client"
+	"github.com/pkg/errors"
+	"gopkg.in/urfave/cli.v2"
+)
+
+func Confirm(client *client.VirgilHttpClient) *cli.Command {
+	return &cli.Command{
+		Name:      "confirm",
+		Aliases:   []string{"c"},
+		ArgsUsage: "email session_token confirmation_code",
+		Usage:     "Registers a new account",
+		Action: func(context *cli.Context) error {
+			return confirmFunc(context, client)
+		},
+	}
+}
+func confirmFunc(context *cli.Context, vcli *client.VirgilHttpClient) error {
+
+	if context.NArg() < 3 {
+		return errors.New("invalid number of arguments")
+	}
+
+	email := context.Args().First()
+	sessionToken := context.Args().Get(1)
+	confirmationCode := context.Args().Get(2)
+
+	req := &ConfirmAccountReq{
+		Email: email,
+		ConfirmationSessionToken: sessionToken,
+		ConfirmationCode:         confirmationCode,
+	}
+
+	var resp *ConfirmAccountResp
+
+	_, err := vcli.Send(http.MethodPost, "", "accounts/v1/confirm-account", req, &resp)
+
+	if err != nil {
+		return err
+	}
+
+	if resp != nil {
+		fmt.Println("Your access token:", resp.AccessToken)
+	}
+
+	return nil
+}

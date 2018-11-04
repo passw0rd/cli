@@ -54,11 +54,12 @@ var CommitId string
 func main() {
 
 	vcli := &client.VirgilHttpClient{
-		Address: "http://api.passw0rd.io/",
+		Address: "https://api.passw0rd.io/",
 	}
 
 	app := &cli.App{
-		Version: Version + " " + BuildTime + " commit " + CommitId,
+		Version:     Version + " " + BuildTime + " commit " + CommitId,
+		Description: "password.io client application",
 
 		Flags: []cli.Flag{
 			&cli.StringFlag{

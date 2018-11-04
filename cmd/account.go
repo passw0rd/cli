@@ -50,6 +50,7 @@ func Account(client *client.VirgilHttpClient) *cli.Command {
 		Usage:     "Manage your account",
 		Subcommands: []*cli.Command{
 			account.Register(client),
+			account.Confirm(client),
 		},
 	}
 }

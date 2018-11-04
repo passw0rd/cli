@@ -68,14 +68,14 @@ func registerFunc(context *cli.Context, vcli *client.VirgilHttpClient) error {
 
 	var resp *RegisterResponse
 
-	_, err := vcli.Send(http.MethodPut, "", "accounts/v1/account", req, &resp)
+	_, err := vcli.Send(http.MethodPost, "", "accounts/v1/account", req, &resp)
 
 	if err != nil {
 		return err
 	}
 
 	if resp != nil {
-		fmt.Println("Your token:", resp.Token)
+		fmt.Println("Your registration session token:", resp.Token)
 	}
 
 	return nil
