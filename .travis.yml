@@ -2,8 +2,6 @@ language: go
 
 go: tip
 
-gobuild_args: -ldflags "`-extldflags -static` -X main.Version=${TRAVIS_TAG} -X main.BuildTime=`date -u '+%Y-%m-%d_%I:%M:%S%p'` -X main.CommitId=${TRAVIS_COMMIT}"
-
 before_install: go get -t ./...
 
 script:
@@ -20,9 +18,9 @@ before_deploy:
     GOARCH=${PLATFORM#*/}
 
     if [ "$GOOS" = "windows" ]; then
-      build_cmd="GOOS=$GOOS GOARCH=$GOARCH go build -o passw0rd -ldflags '-w -s'"
+      build_cmd="GOOS=$GOOS GOARCH=$GOARCH go build -o passw0rd.exe -ldflags '-w -s -X main.Version=${TRAVIS_TAG} -X main.BuildTime=`date -u '+%Y-%m-%d_%I:%M:%S%p'` -X main.CommitId=${TRAVIS_COMMIT}'"
     else
-      build_cmd="CGO_ENABLED=0 GOOS=$GOOS GOARCH=$GOARCH go build -o passw0rd -ldflags '-w -extldflags `-static`'"
+      build_cmd="CGO_ENABLED=0 GOOS=$GOOS GOARCH=$GOARCH go build -o passw0rd -ldflags '-w -s -extldflags '-static' -X main.Version=${TRAVIS_TAG} -X main.BuildTime=`date -u '+%Y-%m-%d_%I:%M:%S%p'` -X main.CommitId=${TRAVIS_COMMIT}'"
     fi
     if ! eval $build_cmd; then
       echo "Failed building passw0rd for $PLATFORM" && return 1
