@@ -18,7 +18,7 @@ before_deploy:
     GOARCH=${PLATFORM#*/}
 
     if [ "$GOOS" = "windows" ]; then
-      build_cmd="GOOS=$GOOS GOARCH=$GOARCH go build -o passw0rd.exe -ldflags '-w -s -X main.Version=${TRAVIS_TAG} -X main.BuildTime=`date -u '+%Y-%m-%d_%I:%M:%S%p'` -X main.CommitId=${TRAVIS_COMMIT}'"
+      build_cmd="GOOS=$GOOS GOARCH=$GOARCH go build -o 'passw0rd.exe' -ldflags '-w -s -extldflags '-static' -X main.Version=${TRAVIS_TAG} -X main.BuildTime=`date -u '+%Y-%m-%d_%I:%M:%S%p'` -X main.CommitId=${TRAVIS_COMMIT}'"
     else
       build_cmd="CGO_ENABLED=0 GOOS=$GOOS GOARCH=$GOARCH go build -o passw0rd -ldflags '-w -s -extldflags '-static' -X main.Version=${TRAVIS_TAG} -X main.BuildTime=`date -u '+%Y-%m-%d_%I:%M:%S%p'` -X main.CommitId=${TRAVIS_COMMIT}'"
     fi
@@ -27,7 +27,7 @@ before_deploy:
     fi
 
     if [ "$GOOS" = "windows" ]; then
-      zip passw0rd-${GOOS}-${GOARCH}.zip passw0rd
+      zip passw0rd-${GOOS}-${GOARCH}.zip passw0rd.exe
     else
       tar cvzf passw0rd-${GOOS}-${GOARCH}.tgz passw0rd
     fi
