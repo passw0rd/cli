@@ -20,9 +20,9 @@ before_deploy:
     GOARCH=${PLATFORM#*/}
 
     if [ "$GOOS" = "windows" ]; then
-      build_cmd="GOOS=$GOOS GOARCH=$GOARCH go build -o passw0rd -ldflags '`-extldflags -static` -w -s'"
+      build_cmd="GOOS=$GOOS GOARCH=$GOARCH go build -o passw0rd -ldflags '-w -s'"
     else
-      build_cmd="CGO_ENABLED=0 GOOS=$GOOS GOARCH=$GOARCH go build -o passw0rd -ldflags '`-extldflags -static` -d -w -s'"
+      build_cmd="CGO_ENABLED=0 GOOS=$GOOS GOARCH=$GOARCH go build -o passw0rd -ldflags '-w -extldflags `-static`'"
     fi
     if ! eval $build_cmd; then
       echo "Failed building passw0rd for $PLATFORM" && return 1
