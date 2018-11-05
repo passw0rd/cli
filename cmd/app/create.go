@@ -52,32 +52,41 @@ func Create(client *client.VirgilHttpClient) *cli.Command {
 		ArgsUsage: "name",
 		Usage:     "Create a new app",
 		Action: func(context *cli.Context) error {
-			return CreateFunc(context, client)
+
+			if context.NArg() < 1 {
+				return errors.New("invalid number of arguments")
+			}
+
+			token := context.String("token")
+			name := context.Args().First()
+
+			id, pub, err := CreateFunc(token, name, client)
+
+			if err != nil {
+				return err
+			}
+
+			fmt.Println("Your app ID:", id)
+			fmt.Println("Your app public key:", pub)
+
+			return nil
 		},
 	}
 }
-func CreateFunc(context *cli.Context, vcli *client.VirgilHttpClient) error {
+func CreateFunc(token, name string, vcli *client.VirgilHttpClient) (string, string, error) {
 
-	if context.NArg() < 1 {
-		return errors.New("invalid number of arguments")
-	}
-
-	token := context.String("token")
-
-	name := context.Args().First()
 	req := &CreateAppRequest{Name: name}
 	var resp *CreateAppResponse
 
 	_, err := vcli.Send(http.MethodPost, token, "accounts/v1/application", req, &resp)
 
 	if err != nil {
-		return err
+		return "", "", err
 	}
 
 	if resp != nil {
-		fmt.Println("Your app ID:", resp.ID)
-		fmt.Println("Your app public key:", "PK.1."+resp.PublicKey)
+		return resp.ID, "PK.1." + resp.PublicKey, nil
 	}
 
-	return nil
+	return "", "", errors.New("empty response")
 }

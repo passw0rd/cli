@@ -52,19 +52,25 @@ func Confirm(client *client.VirgilHttpClient) *cli.Command {
 		ArgsUsage: "email session_token confirmation_code",
 		Usage:     "Registers a new account",
 		Action: func(context *cli.Context) error {
-			return confirmFunc(context, client)
+
+			if context.NArg() < 3 {
+				return errors.New("invalid number of arguments")
+			}
+
+			email := context.Args().First()
+			sessionToken := context.Args().Get(1)
+			confirmationCode := context.Args().Get(2)
+
+			token, err := confirmFunc(email, sessionToken, confirmationCode, client)
+			if err != nil {
+				return err
+			}
+			fmt.Println("Your access token:", token)
+			return nil
 		},
 	}
 }
-func confirmFunc(context *cli.Context, vcli *client.VirgilHttpClient) error {
-
-	if context.NArg() < 3 {
-		return errors.New("invalid number of arguments")
-	}
-
-	email := context.Args().First()
-	sessionToken := context.Args().Get(1)
-	confirmationCode := context.Args().Get(2)
+func confirmFunc(email, sessionToken, confirmationCode string, vcli *client.VirgilHttpClient) (string, error) {
 
 	req := &ConfirmAccountReq{
 		Email: email,
@@ -77,12 +83,12 @@ func confirmFunc(context *cli.Context, vcli *client.VirgilHttpClient) error {
 	_, err := vcli.Send(http.MethodPost, "", "accounts/v1/confirm-account", req, &resp)
 
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	if resp != nil {
-		fmt.Println("Your access token:", resp.AccessToken)
+		return resp.AccessToken, nil
 	}
 
-	return nil
+	return "", errors.New("empty response")
 }

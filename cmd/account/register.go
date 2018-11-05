@@ -37,8 +37,16 @@
 package account
 
 import (
+	"bufio"
+	"crypto/rand"
+	"encoding/base64"
+	"encoding/hex"
 	"fmt"
 	"net/http"
+	"os"
+
+	"github.com/passw0rd/cli/cmd/app"
+	phe "github.com/passw0rd/phe-go"
 
 	"github.com/passw0rd/cli/client"
 	"github.com/pkg/errors"
@@ -72,6 +80,48 @@ func registerFunc(context *cli.Context, vcli *client.VirgilHttpClient) error {
 
 	if err != nil {
 		return err
+	}
+
+	fmt.Println("Enter confirmation code:")
+
+	scanner := bufio.NewScanner(os.Stdin)
+	scanner.Scan()
+
+	code := scanner.Text()
+
+	if code == "" {
+		return errors.New("empty confirmation code")
+	}
+
+	token, err := confirmFunc(email, resp.Token, code, vcli)
+
+	if err != nil {
+		return err
+	}
+
+	fmt.Println("Would you like to create a new default app and a private key right now? [y]")
+
+	scanner.Scan()
+	text := scanner.Text()
+
+	if text == "" || text == "y" {
+
+		appName := make([]byte, 4)
+		rand.Read(appName)
+
+		id, pub, err := app.CreateFunc(token, "My_Default_App_"+hex.EncodeToString(appName), vcli)
+		if err != nil {
+			fmt.Println("something went wrong. Use your access token and try again:", token)
+			return err
+		}
+
+		fmt.Println("Appp name:         ", "My_Default_App_"+hex.EncodeToString(appName))
+		fmt.Println("Access token:      ", token)
+		fmt.Println("App ID:            ", id)
+		fmt.Println("Server public key: ", pub)
+		key := phe.GenerateClientKey()
+		fmt.Println("Client private key:", "SK.1."+base64.StdEncoding.EncodeToString(key))
+		return nil
 	}
 
 	if resp != nil {
