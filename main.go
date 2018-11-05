@@ -40,10 +40,10 @@ import (
 	"log"
 	"os"
 
+	"gopkg.in/urfave/cli.v2/altsrc"
+
 	"github.com/passw0rd/cli/client"
-
 	"github.com/passw0rd/cli/cmd"
-
 	"gopkg.in/urfave/cli.v2"
 )
 
@@ -55,40 +55,53 @@ func main() {
 		Address: "https://api.passw0rd.io/",
 	}
 
+	flags := []cli.Flag{
+		&cli.StringFlag{
+			Name:    "config",
+			Aliases: []string{"cfg"},
+			Usage:   "yaml config file path",
+		},
+		altsrc.NewStringFlag(&cli.StringFlag{
+			Name:    "token",
+			Aliases: []string{"t"},
+			Usage:   "Auth token",
+			EnvVars: []string{"PASSW0RD_TOKEN"},
+		}),
+		altsrc.NewStringFlag(&cli.StringFlag{
+			Name:    "appid",
+			Usage:   "App ID",
+			EnvVars: []string{"PASSW0RD_APP_ID"},
+		}),
+		altsrc.NewStringFlag(&cli.StringFlag{
+			Name:    "public_key",
+			Aliases: []string{"pk"},
+			Usage:   "Service public key",
+			EnvVars: []string{"PASSW0RD_PUB"},
+		}),
+		altsrc.NewStringFlag(&cli.StringFlag{
+			Name:    "secret_key",
+			Aliases: []string{"sk"},
+			Usage:   "Client private key",
+			EnvVars: []string{"PASSW0RD_SECRET"},
+		}),
+	}
+
 	app := &cli.App{
 		Version:     Version,
 		Description: "password.io client application",
-
-		Flags: []cli.Flag{
-			&cli.StringFlag{
-				Name:    "token",
-				Aliases: []string{"t"},
-				Usage:   "Auth token",
-				EnvVars: []string{"PASSW0RD_TOKEN"},
-			},
-			&cli.StringFlag{
-				Name:    "appid",
-				Usage:   "App ID",
-				EnvVars: []string{"PASSW0RD_APP_ID"},
-			},
-			&cli.StringFlag{
-				Name:    "public_key",
-				Aliases: []string{"pk"},
-				Usage:   "Service public key",
-				EnvVars: []string{"PASSW0RD_PUB"},
-			},
-			&cli.StringFlag{
-				Name:    "secret_key",
-				Aliases: []string{"sk"},
-				Usage:   "Client private key",
-				EnvVars: []string{"PASSW0RD_SECRET"},
-			},
-		},
+		Flags:       flags,
 		Commands: []*cli.Command{
 			cmd.Account(vcli),
 			cmd.Application(vcli),
 			cmd.Keygen(),
 			cmd.Demo(),
+		},
+		Before: func(c *cli.Context) error {
+			if _, err := os.Stat(c.String("config")); os.IsNotExist(err) {
+				return nil
+			}
+
+			return altsrc.InitInputSourceWithContext(flags, altsrc.NewYamlSourceFromFlagFunc("config"))(c)
 		},
 	}
 
