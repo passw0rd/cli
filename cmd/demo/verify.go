@@ -62,8 +62,8 @@ func verifyFunc(context *cli.Context) error {
 		return errors.New("invalid number of arguments")
 	}
 
-	token := context.String("token")
-	appId := context.String("appid")
+	token := context.String("access_token")
+	appId := context.String("app_id")
 	pub := context.String("pk")
 	priv := context.String("sk")
 	pwd := context.Args().First()

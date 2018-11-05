@@ -115,12 +115,12 @@ func registerFunc(context *cli.Context, vcli *client.VirgilHttpClient) error {
 			return err
 		}
 
-		fmt.Println("Appp name:         ", "My_Default_App_"+hex.EncodeToString(appName))
-		fmt.Println("Access token:      ", token)
-		fmt.Println("App ID:            ", id)
-		fmt.Println("Server public key: ", pub)
+		fmt.Println("Your credentials:")
+		fmt.Println("access_token: ", token)
+		fmt.Println("app_id: ", id)
+		fmt.Println("public_key: ", pub)
 		key := phe.GenerateClientKey()
-		fmt.Println("Client private key:", "SK.1."+base64.StdEncoding.EncodeToString(key))
+		fmt.Println("private_key: ", "SK.1."+base64.StdEncoding.EncodeToString(key))
 		return nil
 	}
 

@@ -62,14 +62,14 @@ func main() {
 			Usage:   "yaml config file path",
 		},
 		altsrc.NewStringFlag(&cli.StringFlag{
-			Name:    "token",
+			Name:    "access_token",
 			Aliases: []string{"t"},
-			Usage:   "Auth token",
+			Usage:   "Access token",
 			EnvVars: []string{"PASSW0RD_TOKEN"},
 		}),
 		altsrc.NewStringFlag(&cli.StringFlag{
-			Name:    "appid",
-			Usage:   "App ID",
+			Name:    "app_id",
+			Usage:   "Application ID",
 			EnvVars: []string{"PASSW0RD_APP_ID"},
 		}),
 		altsrc.NewStringFlag(&cli.StringFlag{

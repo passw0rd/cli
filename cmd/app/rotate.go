@@ -66,8 +66,8 @@ func RotateFunc(context *cli.Context, vcli *client.VirgilHttpClient) error {
 		return errors.New("invalid number of arguments")
 	}
 
-	token := context.String("token")
-	appId := context.String("appid")
+	token := context.String("access_token")
+	appId := context.String("app_id")
 
 	var resp *RotateResponse
 

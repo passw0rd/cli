@@ -57,7 +57,7 @@ func Create(client *client.VirgilHttpClient) *cli.Command {
 				return errors.New("invalid number of arguments")
 			}
 
-			token := context.String("token")
+			token := context.String("access_token")
 			name := context.Args().First()
 
 			id, pub, err := CreateFunc(token, name, client)
