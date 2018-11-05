@@ -89,7 +89,7 @@ func verifyFunc(context *cli.Context) error {
 		return err
 	}
 
-	fmt.Printf("Encryption key: %x\n", key)
+	fmt.Printf("Password is correct. Encryption key: %x\n", key)
 
 	return nil
 }
