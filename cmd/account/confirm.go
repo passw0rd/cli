@@ -38,6 +38,7 @@ package account
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/passw0rd/cli/client"
@@ -60,6 +61,16 @@ func Confirm(client *client.VirgilHttpClient) *cli.Command {
 			email := context.Args().First()
 			sessionToken := context.Args().Get(1)
 			confirmationCode := context.Args().Get(2)
+
+			if email == "" {
+				log.Fatal("please specify email")
+			}
+			if sessionToken == "" {
+				log.Fatal("please specify session token")
+			}
+			if confirmationCode == "" {
+				log.Fatal("please specify confirmation code")
+			}
 
 			token, err := confirmFunc(email, sessionToken, confirmationCode, client)
 			if err != nil {

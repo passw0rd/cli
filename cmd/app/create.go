@@ -60,6 +60,10 @@ func Create(client *client.VirgilHttpClient) *cli.Command {
 			token := context.String("access_token")
 			name := context.Args().First()
 
+			if token == "" {
+				return errors.New("please specify your access token")
+			}
+
 			id, pub, err := CreateFunc(token, name, client)
 
 			if err != nil {

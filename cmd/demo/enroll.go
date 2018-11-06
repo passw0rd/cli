@@ -39,6 +39,7 @@ package demo
 import (
 	"encoding/base64"
 	"fmt"
+	"log"
 
 	"github.com/passw0rd/sdk-go"
 	"github.com/pkg/errors"
@@ -50,7 +51,7 @@ func Enroll() *cli.Command {
 	return &cli.Command{
 		Name:      "enroll",
 		Aliases:   []string{"e"},
-		ArgsUsage: "password > record",
+		ArgsUsage: "password record",
 		Usage:     "Gets enrollment record for a password",
 		Action: func(context *cli.Context) error {
 			return enrollFunc(context)
@@ -68,6 +69,19 @@ func enrollFunc(context *cli.Context) error {
 	pub := context.String("pk")
 	priv := context.String("sk")
 	pwd := context.Args().First()
+
+	if token == "" {
+		log.Fatal("please specify your access token")
+	}
+	if appId == "" {
+		log.Fatal("please specify app id")
+	}
+	if pub == "" {
+		log.Fatal("please specify server public key")
+	}
+	if priv == "" {
+		log.Fatal("please specify your private key")
+	}
 
 	ctx, err := passw0rd.CreateContext(token, appId, priv, pub)
 	if err != nil {

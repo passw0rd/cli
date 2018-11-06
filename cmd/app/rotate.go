@@ -39,6 +39,7 @@ package app
 import (
 	"encoding/base64"
 	"fmt"
+	"log"
 	"net/http"
 	"strconv"
 
@@ -53,7 +54,7 @@ func Rotate(client *client.VirgilHttpClient) *cli.Command {
 	return &cli.Command{
 		Name:      "rotate",
 		Aliases:   []string{"r"},
-		ArgsUsage: "",
+		ArgsUsage: "Specify access_token and app_id",
 		Usage:     "rotate secret on server and issue an update token",
 		Action: func(context *cli.Context) error {
 			return RotateFunc(context, client)
@@ -68,6 +69,13 @@ func RotateFunc(context *cli.Context, vcli *client.VirgilHttpClient) error {
 
 	token := context.String("access_token")
 	appId := context.String("app_id")
+
+	if token == "" {
+		log.Fatal("please specify your access token")
+	}
+	if appId == "" {
+		log.Fatal("please specify your app id")
+	}
 
 	var resp *RotateResponse
 

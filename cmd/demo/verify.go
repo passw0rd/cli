@@ -39,6 +39,7 @@ package demo
 import (
 	"encoding/base64"
 	"fmt"
+	"log"
 
 	"github.com/passw0rd/sdk-go"
 	"github.com/pkg/errors"
@@ -68,6 +69,27 @@ func verifyFunc(context *cli.Context) error {
 	priv := context.String("sk")
 	pwd := context.Args().First()
 	recStr := context.Args().Get(1)
+
+	if token == "" {
+		log.Fatal("please specify your access token")
+	}
+	if appId == "" {
+		log.Fatal("please specify app id")
+	}
+	if pub == "" {
+		log.Fatal("please specify server public key")
+	}
+	if priv == "" {
+		log.Fatal("please specify your private key")
+	}
+
+	if pwd == "" {
+		log.Fatal("please specify your password")
+	}
+
+	if pwd == "" {
+		log.Fatal("please specify record")
+	}
 
 	rec, err := base64.StdEncoding.DecodeString(recStr)
 	if err != nil {
