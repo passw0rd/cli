@@ -88,7 +88,8 @@ func main() {
 
 	app := &cli.App{
 		Version:     Version,
-		Description: "password.io client application",
+		Description: "passw0rd.io command line interface",
+		Name:        "passw0rd.io",
 		Flags:       flags,
 		Commands: []*cli.Command{
 			cmd.Account(vcli),
