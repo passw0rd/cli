@@ -15,10 +15,10 @@
 The Passw0rd CLI is provided as a binary file, and it is available for Mac OS, FreeBSD,  Linux OS and Windows OS.
 
 Download the latest CLI package here: https://github.com/passw0rd/cli/releases:
-- MacOS package name: passw0rd-darwin-amd64.tgz
-- Linux package name: passw0rd-linux-amd64.tgz
-- FreeBSD package name: passw0rd-freebsd-amd64.tgz
-- Windows package name: passw0rd-windows-amd64.zip
+- MacOS package name: [passw0rd-darwin-amd64.tgz](https://github.com/passw0rd/cli/releases/download/v1.0.0/passw0rd-darwin-amd64.tgz)
+- Linux package name: [passw0rd-linux-amd64.tgz](https://github.com/passw0rd/cli/releases/download/v1.0.0/passw0rd-linux-amd64.tgz)
+- FreeBSD package name: [passw0rd-freebsd-amd64.tgz](https://github.com/passw0rd/cli/releases/download/v1.0.0/passw0rd-freebsd-amd64.tgz)
+- Windows package name: [passw0rd-windows-amd64.zip](https://github.com/passw0rd/cli/releases/download/v1.0.0/passw0rd-windows-amd64.zip)
 
 
 ## Launching CLI
