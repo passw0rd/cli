@@ -90,13 +90,15 @@ func registerFunc(context *cli.Context, vcli *client.VirgilHttpClient) error {
 	code := scanner.Text()
 
 	if code == "" {
-		return errors.New("empty confirmation code")
+		fmt.Println("Your session token:", resp.Token)
+		return errors.New("you did not enter confirmation code. Try again with confirm command")
 	}
 
 	token, err := confirmFunc(email, resp.Token, code, vcli)
 
 	if err != nil {
-		return err
+		fmt.Println("Your session token:", resp.Token)
+		return errors.Wrap(err, "error while trying to confirm account. Try again with confirm command")
 	}
 
 	fmt.Println("Would you like to create a new default app and a private key right now? [y]")
