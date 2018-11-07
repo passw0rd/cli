@@ -86,7 +86,7 @@ passw0rd keygen
 
 #### Get an Update Token
 ```bash
-passw0rd -t 8Bw0003U000000000000000q6n5dKIlz --app_id 857111111111111111111c app r
+passw0rd -t 8Bw0003U000000000000000q6n5dKIlz --app_id 857111111111111111111c app rotate
 ```
 
 where:
