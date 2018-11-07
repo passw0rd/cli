@@ -99,7 +99,7 @@ func (vc *VirgilHttpClient) Send(method string, token string, url string, payloa
 		return nil, errors.Wrap(err, "VirgilHttpClient.Send: read response body")
 	}
 
-	return nil, errors.New(fmt.Sprintf("%s\n", string(respBody)))
+	return nil, errors.New(fmt.Sprintf("server returned %d %s\n", resp.StatusCode, string(respBody)))
 }
 
 func (vc *VirgilHttpClient) getHttpClient() HttpClient {
