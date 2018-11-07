@@ -5,7 +5,7 @@
 
 [Installation](#installation) | [Launching CLI](#launching-cli) | [Commands](#commands) | [Usage Examples](#usage-examples) | [Support](#support)
 
-<a href="https://passw0rd.io/"><img width="260px" src="https://cdn.virgilsecurity.com/assets/images/github/logos/passw0rd.png" align="left" hspace="0" vspace="0"></a>[Virgil Security](https://virgilsecurity.com) introduces to developers a **Passw0rd CLI** is an open source tool that provides commands for interacting with the Passw0rd Service and Virgil Cloud. With minimal configuration, you can start using all of the functionality provided by the Passw0rd from your favorite terminal program.
+<a href="https://passw0rd.io/"><img width="260px" src="https://cdn.virgilsecurity.com/assets/images/github/logos/passw0rd.png" align="left" hspace="0" vspace="0"></a>[Virgil Security](https://virgilsecurity.com) introduces to developers a **Passw0rd CLI** – an open source tool that provides commands for interacting with the Passw0rd Service and Virgil Cloud. With minimal configuration, you can start using all of the functionality provided by the Passw0rd from your favorite terminal program.
 - **Linux shells** – Use common shell programs such as Bash, Zsh, and tsch to run commands in Linux, macOS, or Unix.
 - **Windows command line** – On Microsoft Windows, run commands in either PowerShell or the Windows Command Processor.
 
@@ -24,14 +24,14 @@ Download the latest CLI package here: https://github.com/passw0rd/cli/releases:
 ## Launching CLI
 
 #### FreeBSD / Linux / Mac OS
-Run the Passw0rd CLI with following command:
+Run the Passw0rd CLI with the following command:
 ```bash
 ./passw0rd
 ```
 > or use `sudo ./passw0rd` when you need to run the command as an administrator
 
 #### Windows OS
-Run the Passw0rd CLI with following command:
+Run the Passw0rd CLI with the following command:
 ```bash
 passw0rd.exe
 # or just `passw0rd`
@@ -46,9 +46,8 @@ Using the Passw0rd CLI you can:
   * get your Passw0rd App's credentials, such as: App ID, Access token, Server Public Key, Client Secret Key.
   * get your access token
 
-To get more information run the Passw0rd CLI or its command with the `--help` or `-h` option, that displays full help list and available commands.
+To get more information, run the Passw0rd CLI or its command with the `--help` or `-h` option that displays full help list and available commands.
 
-> Consequently, to get help on run the following command: `./passw0rd --help` (Windows: `passw0rd --help`). To get help using a command use the `--help` or `-h` option after the command, for example: `./passw0rd account --help` (Windows: `passw0rd account --help`).
 
 ## Usage Examples
 The Passw0rd CLI has the following usage syntax:
@@ -60,12 +59,12 @@ passw0rd account register my@email.com
 ```
 Then, you have to confirm your account by entering a confirmation code you got in the email. Now, your account is confirmed and registered.
 
-> !!! Once you confirm your account, the Password CLI immediately asks you to create a new Passw0rd App (with default App's name) and a Private Key". You can:
-- apply the offer and get all necessary credentials (access_token, app_id, public_key, private_key) to start working with Passw0rd Service or
-- back later. If you choose this option, thus you will get your Access Token - store it somewhere in safe place.
+> !!! Once you've confirmed your account, the Password CLI immediately asks you to create a new Passw0rd App (with a default App's name) and a Private Key. You can:
+- accept the offer and get all the necessary credentials (access_token, app_id, public_key, private_key) to start working with Passw0rd Service or
+- come back later. If you choose this option, you get only your Access Token - store it somewhere in a safe place. Other credentials (app_id, public_key, private_key) you'll be able to generate using your access_token later.
 
 
-Remember, If you lose your access token you it's not possible to restore it or generate a new one at this moment.
+Remember, if you lose your access token it won't be possible to restore it or generate a new one in this version of CLI.
 
 
 
@@ -75,7 +74,7 @@ passw0rd --token 8Bw0003U000000000000000q6n5dKIlz application create my_passw0rd
 ```
 
 where:
-- 8Bw0003U000000000000000q6n5dKIlz - is an access token that you got at registration step. (it's not possible to restore or generate a new access token at this moment);
+- 8Bw0003U000000000000000q6n5dKIlz - is an access token that you got at registration step (it's not possible to restore or generate a new access token in this version);
 - my_passw0rd_app - is a name of your application.
 
 #### Generate a new Private Key
@@ -83,15 +82,15 @@ where:
 passw0rd keygen
 ```
 
->! Remember, it's not possible to restore a private key.
+>! Remember, it's not possible to restore a private key at all.
 
 #### Get an Update Token
 ```bash
-passw0rd -t 8Bw0003U000000000000000q6n5dKIlz --app_id 857111111111111111111c app r
+passw0rd -t 8Bw0003U000000000000000q6n5dKIlz --app_id 857111111111111111111c app rotate
 ```
 
 where:
-- 8Bw0003U000000000000000q6n5dKIlz - is an access token that you got at registration step. (it's not possible to restore or generate a new access token at this moment);
+- 8Bw0003U000000000000000q6n5dKIlz - is an access token that you got at registration step (it's not possible to restore or generate a new access token in this version);
 - 857111111111111111111c - is an ID of your application.
 
 
