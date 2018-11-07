@@ -51,7 +51,7 @@ func Enroll() *cli.Command {
 	return &cli.Command{
 		Name:      "enroll",
 		Aliases:   []string{"e"},
-		ArgsUsage: "password record",
+		ArgsUsage: "password",
 		Usage:     "Gets enrollment record for a password",
 		Action: func(context *cli.Context) error {
 			return enrollFunc(context)
