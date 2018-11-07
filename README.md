@@ -53,6 +53,8 @@ To get more information, run the Passw0rd CLI or its command with the `--help` o
 The Passw0rd CLI has the following usage syntax:
 `passw0rd [global options] command [command options] [arguments...]`
 
+The examples below are given for the FreeBSD/Linux/Mac OS platforms.
+
 #### Register your account
 ```bash
 passw0rd account register my@email.com
