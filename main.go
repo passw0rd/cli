@@ -81,7 +81,7 @@ func main() {
 		altsrc.NewStringFlag(&cli.StringFlag{
 			Name:    "secret_key",
 			Aliases: []string{"sk"},
-			Usage:   "Client private key",
+			Usage:   "Client secret key",
 			EnvVars: []string{"PASSW0RD_SECRET"},
 		}),
 	}

@@ -101,7 +101,7 @@ func registerFunc(context *cli.Context, vcli *client.VirgilHttpClient) error {
 		return errors.Wrap(err, "error while trying to confirm account. Try again with confirm command")
 	}
 
-	fmt.Println("Would you like to create a new default app and a private key right now? [y]")
+	fmt.Println("Would you like to create a new default app and a client secret key right now? [y]")
 
 	scanner.Scan()
 	text := scanner.Text()
