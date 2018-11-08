@@ -57,7 +57,7 @@ The examples below are given for the FreeBSD/Linux/Mac OS platforms.
 
 #### Register your account
 ```bash
-passw0rd account register my@email.com
+./passw0rd account register my@email.com
 ```
 Then, you have to confirm your account by entering a confirmation code you got in the email. Now, your account is confirmed and registered.
 
@@ -72,7 +72,7 @@ Remember, if you lose your access token it won't be possible to restore it or ge
 
 #### Register Passw0rd's Application
 ```bash
-passw0rd --token 8Bw0003U000000000000000q6n5dKIlz application create my_passw0rd_app
+./passw0rd --access_token 8Bw0003U000000000000000q6n5dKIlz application create my_passw0rd_app
 ```
 
 where:
@@ -81,20 +81,31 @@ where:
 
 #### Generate a new Private Key
 ```bash
-passw0rd keygen
+./passw0rd keygen
 ```
 
 >! Remember, it's not possible to restore a private key at all.
 
 #### Get an Update Token
 ```bash
-passw0rd -t 8Bw0003U000000000000000q6n5dKIlz --app_id 857111111111111111111c app rotate
+./passw0rd --access_token 8Bw0003U000000000000000q6n5dKIlz --app_id 857111111111111111111c app rotate
 ```
 
 where:
 - 8Bw0003U000000000000000q6n5dKIlz - is an access token that you got at registration step (it's not possible to restore or generate a new access token in this version);
 - 857111111111111111111c - is an ID of your application.
 
+
+#### Verify user's password
+The demo command allows you verify user's password:
+```bash
+./passw0rd --cfg passw0rd.yaml demo verify user_password user_passw0rd_record
+```
+
+where:
+- passw0rd.yaml - a config file that contains your account credentials: access_token, app_id, public_key, private_key. Create passw0rd.yaml file, paste your account credentials into it and specify the pass to it.
+- user_password - user password that he or her uses to sign in at your server side. 
+- user_passw0rd_record - database passw0rd's record that is associated with the user.
 
 
 ## License
