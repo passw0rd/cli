@@ -96,8 +96,21 @@ where:
 - 857111111111111111111c - is an ID of your application.
 
 
+Use these two examples just to try out as a demo the Passw0rd technologies and see how the functions work without setting up the SDK. 
+
+#### Enroll user's password
+The demo command allows you to enroll user's password:
+
+```bash
+./passw0rd --config passw0rd.yaml demo enroll user_password 
+```
+where:
+- passw0rd.yaml - a config file that contains your account credentials: access_token, app_id, public_key, private_key. This file is not created by default. So, create passw0rd.yaml file, paste your account credentials into it and specify the pass to it.
+- user_password - user password that he or she uses to sign in to your server side. 
+- user_passw0rd_record - database passw0rd's record that is associated with the user.
+
 #### Verify user's password
-The demo command allows you verify user's password:
+The demo command allows you to verify user's password:
 ```bash
 ./passw0rd --config passw0rd.yaml demo verify user_password user_passw0rd_record
 ```
