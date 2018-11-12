@@ -37,6 +37,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 
@@ -47,7 +48,11 @@ import (
 	"gopkg.in/urfave/cli.v2"
 )
 
-var Version string
+var (
+	version = "dev"
+	commit  = "none"
+	date    = "unknown"
+)
 
 func main() {
 
@@ -87,7 +92,7 @@ func main() {
 	}
 
 	app := &cli.App{
-		Version:     Version,
+		Version:     fmt.Sprintf("%v, commit %v, built at %v", version, commit, date),
 		Description: "passw0rd.io command line interface",
 		Name:        "passw0rd.io",
 		Flags:       flags,
