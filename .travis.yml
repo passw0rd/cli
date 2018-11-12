@@ -2,8 +2,6 @@ language: go
 
 go: stable
 
-before_install: go get -t ./...
-
 script:
   go test ./...
 

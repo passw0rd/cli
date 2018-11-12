@@ -64,7 +64,7 @@ func main() {
 		&cli.StringFlag{
 			Name:    "config",
 			Aliases: []string{"cfg"},
-			Usage:   "yaml config file path",
+			Usage:   "Yaml config file path",
 		},
 		altsrc.NewStringFlag(&cli.StringFlag{
 			Name:    "access_token",
@@ -96,10 +96,10 @@ func main() {
 	}
 
 	app := &cli.App{
-		Version:     fmt.Sprintf("%v, commit %v, built %v", version, commit, date),
-		Description: "passw0rd.io command line interface",
-		Name:        "passw0rd.io",
-		Flags:       flags,
+		Version: fmt.Sprintf("%v, commit %v, built %v", version, commit, date),
+		Name:    "passw0rd",
+		Usage:   "passw0rd.io command line interface",
+		Flags:   flags,
 		Commands: []*cli.Command{
 			cmd.Account(vcli),
 			cmd.Application(vcli),
