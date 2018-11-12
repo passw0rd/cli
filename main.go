@@ -91,8 +91,12 @@ func main() {
 		}),
 	}
 
+	if commit != "none" {
+		commit = commit[:8]
+	}
+
 	app := &cli.App{
-		Version:     fmt.Sprintf("%v, commit %v, built at %v", version, commit, date),
+		Version:     fmt.Sprintf("%v, commit %v, built %v", version, commit, date),
 		Description: "passw0rd.io command line interface",
 		Name:        "passw0rd.io",
 		Flags:       flags,

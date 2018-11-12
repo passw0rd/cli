@@ -1,3 +1,4 @@
+project_name: passw0rd
 builds:
 - env:
   - CGO_ENABLED=0
@@ -8,6 +9,11 @@ builds:
   goarch:
   - 386
   - amd64
+  ignore:
+    - goos: darwin
+      goarch: 386
+    - goos: windows
+      goarch: 386
   binary: passw0rd
 archive:
   replacements:
@@ -32,3 +38,5 @@ changelog:
     - 'readme'
     - Merge pull request
     - Merge branch
+release:
+  name_template: "{{.ProjectName}} CLI v{{.Version}}"
