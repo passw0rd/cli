@@ -5,7 +5,7 @@
 
 [Installation](#installation) | [Launching CLI](#launching-cli) | [Commands](#commands) | [Usage Examples](#usage-examples) | [Support](#support)
 
-<a href="https://passw0rd.io/"><img width="260px" src="https://cdn.virgilsecurity.com/assets/images/github/logos/passw0rd.png" align="left" hspace="0" vspace="0"></a>[Virgil Security](https://virgilsecurity.com) introduces to developers a **Passw0rd CLI** – an open source tool that provides commands for interacting with the Passw0rd Service. With minimal configuration, you can start using all of the functionality provided by the Passw0rd from your favorite terminal program.
+<a href="https://passw0rd.io/"><img width="260px" src="https://cdn.virgilsecurity.com/assets/images/github/logos/passw0rd.png" align="left" hspace="0" vspace="0"></a>[Virgil Security](https://virgilsecurity.com) introduces to developers a **Passw0rd CLI** – an open source tool that provides commands for interacting with the [Passw0rd Service](https://passw0rd.io/). With minimal configuration, you can start using all of the functionality provided by the Passw0rd from your favorite terminal program.
 - **Linux shells** – Use common shell programs such as Bash, Zsh, and tsch to run commands in Linux, macOS, or Unix.
 - **Windows command line** – On Microsoft Windows, run commands in either PowerShell or the Windows Command Processor.
 
@@ -70,7 +70,7 @@ where:
 - 8Bw0003U000000000000000q6n5dKIlz - is an access token that you got at registration step (it's not possible to restore or generate a new access token in this version);
 - my_passw0rd_app - is a name of your application.
 
-#### Generate a new Client Secret Key
+#### Generate a new Secret Key
 ```bash
 ./passw0rd keygen
 ```
@@ -101,7 +101,7 @@ where:
 - user_passw0rd_record - database passw0rd's record that is associated with the user.
 
 
-#### Verify user's password
+#### Verify User password
 The demo command allows you to verify user password:
 ```bash
 ./passw0rd --config passw0rd.yaml demo verify user_password user_passw0rd_record
