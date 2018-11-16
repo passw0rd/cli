@@ -66,7 +66,7 @@ func verifyFunc(context *cli.Context) error {
 	token := context.String("access_token")
 	appId := context.String("app_id")
 	pub := context.String("pk")
-	priv := context.String("sk")
+	sk := context.String("sk")
 	pwd := context.Args().First()
 	recStr := context.Args().Get(1)
 
@@ -79,10 +79,9 @@ func verifyFunc(context *cli.Context) error {
 	if pub == "" {
 		log.Fatal("please specify server public key")
 	}
-	if priv == "" {
+	if sk == "" {
 		log.Fatal("please specify your secret key")
 	}
-
 	if pwd == "" {
 		log.Fatal("please specify your password")
 	}
@@ -96,7 +95,7 @@ func verifyFunc(context *cli.Context) error {
 		return err
 	}
 
-	ctx, err := passw0rd.CreateContext(token, appId, priv, pub)
+	ctx, err := passw0rd.CreateContext(token, appId, sk, pub)
 	if err != nil {
 		return err
 	}

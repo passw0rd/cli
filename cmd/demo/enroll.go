@@ -67,7 +67,7 @@ func enrollFunc(context *cli.Context) error {
 	token := context.String("access_token")
 	appId := context.String("app_id")
 	pub := context.String("pk")
-	priv := context.String("sk")
+	sk := context.String("sk")
 	pwd := context.Args().First()
 
 	if token == "" {
@@ -79,11 +79,11 @@ func enrollFunc(context *cli.Context) error {
 	if pub == "" {
 		log.Fatal("please specify server public key")
 	}
-	if priv == "" {
+	if sk == "" {
 		log.Fatal("please specify your secret key")
 	}
 
-	ctx, err := passw0rd.CreateContext(token, appId, priv, pub)
+	ctx, err := passw0rd.CreateContext(token, appId, sk, pub)
 	if err != nil {
 		return err
 	}
@@ -93,13 +93,12 @@ func enrollFunc(context *cli.Context) error {
 		return err
 	}
 
-	record, key, err := prot.EnrollAccount(pwd)
+	record, _, err := prot.EnrollAccount(pwd)
 	if err != nil {
 		return err
 	}
 
-	fmt.Printf("Database record: %s\n", base64.StdEncoding.EncodeToString(record))
-	fmt.Printf("Encryption key: %x\n", key)
+	fmt.Println(base64.StdEncoding.EncodeToString(record))
 
 	return nil
 }
