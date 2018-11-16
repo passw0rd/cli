@@ -35,8 +35,8 @@ changelog:
     exclude:
     - '^docs:'
     - '^test:'
-    - 'readme'
+    - README
     - Merge pull request
     - Merge branch
 release:
-  name_template: "{{.ProjectName}} CLI v{{.Version}}"
+  name_template: "Passw0rd.io CLI release v{{.Version}}"
