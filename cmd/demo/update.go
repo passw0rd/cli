@@ -34,23 +34,72 @@
  * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  */
 
-package cmd
+package demo
 
 import (
-	"github.com/passw0rd/cli/cmd/demo"
+	"encoding/base64"
+	"fmt"
+
+	"github.com/passw0rd/phe-go"
+
+	"github.com/passw0rd/sdk-go"
+
+	"github.com/pkg/errors"
 	"gopkg.in/urfave/cli.v2"
 )
 
-func Demo() *cli.Command {
+func Update() *cli.Command {
 	return &cli.Command{
-		Name:      "demo",
-		Aliases:   []string{"d"},
-		ArgsUsage: "demo",
-		Usage:     "Try passw0rd in action",
-		Subcommands: []*cli.Command{
-			demo.Enroll(),
-			demo.Verify(),
-			demo.Update(),
+		Name:      "update",
+		Aliases:   []string{"u"},
+		ArgsUsage: "record update_token",
+		Usage:     "update a record using update token",
+		Action: func(context *cli.Context) error {
+			return updateFunc(context)
 		},
 	}
+}
+func updateFunc(context *cli.Context) error {
+
+	if context.NArg() < 2 {
+		return errors.New("invalid number of arguments")
+	}
+
+	recStr := context.Args().First()
+	updateTokenStr := context.Args().Get(1)
+
+	recb, err := base64.StdEncoding.DecodeString(recStr)
+	if err != nil {
+		return err
+	}
+
+	recVersion, rec, err := passw0rd.UnmarshalRecord(recb)
+	if err != nil {
+		return err
+	}
+
+	tokenVersion, updateToken, err := passw0rd.ParseVersionAndContent("UT", updateTokenStr)
+
+	if (recVersion + 1) != tokenVersion {
+		return errors.New("record version should be 1 less than update token version")
+	}
+
+	token, err := passw0rd.UnmarshalUpdateToken(updateToken)
+	if err != nil {
+		return err
+	}
+
+	newRec, err := phe.UpdateRecord(rec, token)
+	if err != nil {
+		return err
+	}
+
+	newRecBin, err := passw0rd.MarshalRecord(tokenVersion, newRec)
+	if err != nil {
+		return err
+	}
+
+	fmt.Println(base64.StdEncoding.EncodeToString(newRecBin))
+
+	return nil
 }
