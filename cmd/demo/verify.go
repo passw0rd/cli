@@ -95,7 +95,7 @@ func verifyFunc(context *cli.Context) error {
 		return err
 	}
 
-	ctx, err := passw0rd.CreateContext(token, appId, sk, pub)
+	ctx, err := passw0rd.CreateContext(token, appId, sk, pub, "")
 	if err != nil {
 		return err
 	}

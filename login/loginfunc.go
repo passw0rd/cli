@@ -34,24 +34,45 @@
  * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  */
 
-package app
+package login
 
-type CreateAppRequest struct {
-	Name string `json:"name"`
-}
+import (
+	"net/http"
+	"os"
 
-type CreateAppResponse struct {
-	ID        string `json:"id"`
-	Name      string `json:"name"`
-	PublicKey string `json:"public_key"`
-}
+	"github.com/howeyc/gopass"
+	"github.com/passw0rd/cli/client"
+	"github.com/passw0rd/cli/models"
+	"github.com/passw0rd/cli/utils"
+)
 
-type UpdateToken struct {
-	A []byte `json:"a"`
-	B []byte `json:"b"`
-}
+func LoginFunc(email, password string, vcli *client.VirgilHttpClient) (err error) {
+	if password == "" {
+		pwd, err := gopass.GetPasswdPrompt("Enter account password:\n", true, os.Stdin, os.Stdout)
+		if err != nil {
+			return err
+		}
+		password = string(pwd)
+	}
 
-type RotateResponse struct {
-	Version     int          `json:"version"`
-	UpdateToken *UpdateToken `json:"update_token"`
+	code, err := gopass.GetPasswdPrompt("Enter 2-factor code:\n", true, os.Stdin, os.Stdout)
+	if err != nil {
+		return
+	}
+
+	req := &models.LoginRequest{
+		Email:    email,
+		Password: password,
+		Totp:     string(code),
+	}
+
+	resp := &models.LoginResponse{}
+
+	_, err = vcli.Send(http.MethodPost, "", "accounts/v1/login", req, resp)
+
+	if err != nil {
+		return err
+	}
+
+	return utils.SaveAccessToken(resp.AccountToken)
 }

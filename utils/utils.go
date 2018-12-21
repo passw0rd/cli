@@ -34,22 +34,58 @@
  * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  */
 
-package account
+package utils
 
-type RegisterRequest struct {
-	Email string `json:"email"`
+import (
+	"io/ioutil"
+	"os"
+	"os/user"
+	"path"
+
+	"github.com/pkg/errors"
+)
+
+func SaveAccessToken(token string) error {
+
+	u, err := user.Current()
+	if err != nil {
+		return err
+	}
+
+	tokenPath := path.Join(u.HomeDir, ".passw0rd")
+
+	if _, err := os.Stat(tokenPath); os.IsNotExist(err) {
+		if err = os.Mkdir(tokenPath, 700); err != nil {
+			return err
+		}
+	}
+
+	tokenPath = path.Join(tokenPath, "token")
+
+	if err = ioutil.WriteFile(tokenPath, []byte(token), 600); err != nil {
+		return err
+	}
+	return nil
 }
 
-type RegisterResponse struct {
-	Token string `json:"confirmation_session_token"`
-}
+func LoadAccessToken() (token string, err error) {
+	u, err := user.Current()
+	if err != nil {
+		return "", err
+	}
 
-type ConfirmAccountReq struct {
-	Email                    string `json:"email"`
-	ConfirmationSessionToken string `json:"confirmation_session_token"`
-	ConfirmationCode         string `json:"confirmation_code"`
-}
+	tokenPath := path.Join(u.HomeDir, ".passw0rd")
 
-type ConfirmAccountResp struct {
-	AccessToken string `json:"access_token,omitempty"`
+	if _, err := os.Stat(tokenPath); os.IsNotExist(err) {
+		return "", errors.New("access token folder does not exist")
+	}
+
+	tokenPath = path.Join(tokenPath, "token")
+
+	if token, err := ioutil.ReadFile(tokenPath); err != nil {
+		return "", err
+	} else {
+		return string(token), nil
+	}
+
 }

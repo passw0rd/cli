@@ -1,0 +1,55 @@
+syntax = "proto3";
+package models;
+
+message RegisterRequest {
+	string email = 1;
+}
+
+message RegisterResponse {
+	string confirmation_session_token = 1;
+}
+
+message ConfirmAccountRequest {
+	string email = 1;
+	string confirmation_session_token = 2;
+	string confirmation_code = 3;
+	string password = 4;
+}
+
+message ConfirmAccountResponse {
+	string qr_url = 1;
+}
+
+message LoginRequest {
+	string email = 1;
+	string password = 2;
+	string totp = 3;
+}
+
+message LoginResponse {
+	string account_token = 1;
+}
+
+message Application {
+	string id = 1;
+	string name = 2;
+	bytes public_key = 3;
+	string app_token = 4;
+}
+
+message CreateAppRequest {
+	string name = 1;
+}
+
+message CreateAppResponse {
+	Application app = 1;
+}
+
+message AccountApplicationsResponse {
+	repeated Application app = 1;
+}
+
+message HttpError {
+	uint32 code = 1;
+	string message = 2;
+}

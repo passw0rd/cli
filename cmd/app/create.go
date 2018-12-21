@@ -37,8 +37,13 @@
 package app
 
 import (
+	"encoding/base64"
 	"fmt"
 	"net/http"
+
+	"github.com/passw0rd/cli/utils"
+
+	"github.com/passw0rd/cli/models"
 
 	"github.com/passw0rd/cli/client"
 	"github.com/pkg/errors"
@@ -49,47 +54,49 @@ func Create(client *client.VirgilHttpClient) *cli.Command {
 	return &cli.Command{
 		Name:      "create",
 		Aliases:   []string{"c"},
-		ArgsUsage: "name",
+		ArgsUsage: "email app_name",
 		Usage:     "Create a new app",
 		Action: func(context *cli.Context) error {
 
-			if context.NArg() < 1 {
+			if context.NArg() < 2 {
 				return errors.New("invalid number of arguments")
 			}
 
-			token := context.String("access_token")
-			name := context.Args().First()
+			context.Args().First()
+			name := context.Args().Get(1)
 
-			if token == "" {
-				return errors.New("please specify your access token")
-			}
-
-			id, pub, err := CreateFunc(token, name, client)
+			token, err := utils.LoadAccessToken()
 
 			if err != nil {
 				return err
 			}
 
-			fmt.Println("Your app ID:", id)
+			pub, appToken, err := CreateFunc(token, name, client)
+
+			if err != nil {
+				return err
+			}
+
 			fmt.Println("Your app public key:", pub)
+			fmt.Println("Your app access token:", appToken)
 
 			return nil
 		},
 	}
 }
-func CreateFunc(token, name string, vcli *client.VirgilHttpClient) (string, string, error) {
+func CreateFunc(token, name string, vcli *client.VirgilHttpClient) (publicKey, appToken string, err error) {
 
-	req := &CreateAppRequest{Name: name}
-	var resp *CreateAppResponse
+	req := &models.CreateAppRequest{Name: name}
+	resp := &models.CreateAppResponse{}
 
-	_, err := vcli.Send(http.MethodPost, token, "accounts/v1/application", req, &resp)
+	_, err = vcli.Send(http.MethodPost, token, "accounts/v1/application", req, resp)
 
 	if err != nil {
-		return "", "", err
+		return
 	}
 
 	if resp != nil {
-		return resp.ID, "PK.1." + resp.PublicKey, nil
+		return "PK.1." + base64.StdEncoding.EncodeToString(resp.App.PublicKey), resp.App.AppToken, nil
 	}
 
 	return "", "", errors.New("empty response")

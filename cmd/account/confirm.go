@@ -37,9 +37,14 @@
 package account
 
 import (
+	"crypto/subtle"
 	"fmt"
 	"log"
 	"net/http"
+	"os"
+
+	"github.com/howeyc/gopass"
+	"github.com/passw0rd/cli/models"
 
 	"github.com/passw0rd/cli/client"
 	"github.com/pkg/errors"
@@ -72,34 +77,49 @@ func Confirm(client *client.VirgilHttpClient) *cli.Command {
 				log.Fatal("please specify confirmation code")
 			}
 
-			token, err := confirmFunc(email, sessionToken, confirmationCode, client)
+			_, url2fa, err := confirmFunc(email, sessionToken, confirmationCode, client)
 			if err != nil {
 				return err
 			}
-			fmt.Println("Your access token:", token)
+			fmt.Println("Please visit:", url2fa)
 			return nil
 		},
 	}
 }
-func confirmFunc(email, sessionToken, confirmationCode string, vcli *client.VirgilHttpClient) (string, error) {
+func confirmFunc(email, sessionToken, confirmationCode string, vcli *client.VirgilHttpClient) (password, qrUrl string, err error) {
 
-	req := &ConfirmAccountReq{
-		Email: email,
-		ConfirmationSessionToken: sessionToken,
-		ConfirmationCode:         confirmationCode,
+	pwd, err := gopass.GetPasswdPrompt("Enter account password:\n", true, os.Stdin, os.Stdout)
+	if err != nil {
+		return
+	}
+	pwdAgain, err := gopass.GetPasswdPrompt("Again:\n", true, os.Stdin, os.Stdout)
+	if err != nil {
+		return
 	}
 
-	var resp *ConfirmAccountResp
+	if subtle.ConstantTimeCompare(pwd, pwdAgain) != 1 {
+		err = errors.New("passwords do not match")
+		return
+	}
 
-	_, err := vcli.Send(http.MethodPost, "", "accounts/v1/confirm-account", req, &resp)
+	req := &models.ConfirmAccountRequest{
+		Email:                    email,
+		ConfirmationSessionToken: sessionToken,
+		ConfirmationCode:         confirmationCode,
+		Password:                 string(pwd),
+	}
+
+	resp := &models.ConfirmAccountResponse{}
+
+	_, err = vcli.Send(http.MethodPost, "", "accounts/v1/confirm-account", req, resp)
 
 	if err != nil {
-		return "", err
+		return
 	}
 
 	if resp != nil {
-		return resp.AccessToken, nil
+		return string(pwd), resp.QrUrl, nil
 	}
 
-	return "", errors.New("empty response")
+	return "", "", errors.New("empty response")
 }

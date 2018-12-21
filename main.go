@@ -57,7 +57,7 @@ var (
 func main() {
 
 	vcli := &client.VirgilHttpClient{
-		Address: "https://api.passw0rd.io/",
+		Address: "https://dev.passw0rd.io/",
 	}
 
 	flags := []cli.Flag{
@@ -66,12 +66,6 @@ func main() {
 			Aliases: []string{"cfg"},
 			Usage:   "Yaml config file path",
 		},
-		altsrc.NewStringFlag(&cli.StringFlag{
-			Name:    "access_token",
-			Aliases: []string{"t"},
-			Usage:   "Access token",
-			EnvVars: []string{"PASSW0RD_TOKEN"},
-		}),
 		altsrc.NewStringFlag(&cli.StringFlag{
 			Name:    "app_id",
 			Usage:   "Application ID",

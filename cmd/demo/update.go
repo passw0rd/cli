@@ -37,14 +37,6 @@
 package demo
 
 import (
-	"encoding/base64"
-	"fmt"
-
-	"github.com/passw0rd/phe-go"
-
-	"github.com/passw0rd/sdk-go"
-
-	"github.com/pkg/errors"
 	"gopkg.in/urfave/cli.v2"
 )
 
@@ -61,7 +53,7 @@ func Update() *cli.Command {
 }
 func updateFunc(context *cli.Context) error {
 
-	if context.NArg() < 2 {
+	/*if context.NArg() < 2 {
 		return errors.New("invalid number of arguments")
 	}
 
@@ -99,7 +91,7 @@ func updateFunc(context *cli.Context) error {
 		return err
 	}
 
-	fmt.Println(base64.StdEncoding.EncodeToString(newRecBin))
+	fmt.Println(base64.StdEncoding.EncodeToString(newRecBin))*/
 
 	return nil
 }

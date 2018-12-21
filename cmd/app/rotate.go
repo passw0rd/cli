@@ -37,16 +37,7 @@
 package app
 
 import (
-	"encoding/base64"
-	"fmt"
-	"log"
-	"net/http"
-	"strconv"
-
-	"github.com/passw0rd/sdk-go"
-
 	"github.com/passw0rd/cli/client"
-	"github.com/pkg/errors"
 	"gopkg.in/urfave/cli.v2"
 )
 
@@ -63,7 +54,7 @@ func Rotate(client *client.VirgilHttpClient) *cli.Command {
 }
 func RotateFunc(context *cli.Context, vcli *client.VirgilHttpClient) error {
 
-	if context.NArg() > 0 {
+	/*if context.NArg() > 0 {
 		return errors.New("invalid number of arguments")
 	}
 
@@ -90,7 +81,7 @@ func RotateFunc(context *cli.Context, vcli *client.VirgilHttpClient) error {
 		version := strconv.Itoa(resp.Version)
 		token := passw0rd.MarshalUpdateToken(resp.UpdateToken.A, resp.UpdateToken.B)
 		fmt.Println("Your update token:", "UT."+version+"."+base64.StdEncoding.EncodeToString(token))
-	}
+	}*/
 
 	return nil
 }

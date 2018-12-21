@@ -38,10 +38,15 @@ package client
 
 import (
 	"bytes"
-	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"net/url"
+	"path"
+
+	"github.com/passw0rd/cli/models"
+
+	"github.com/golang/protobuf/proto"
 
 	"github.com/pkg/errors"
 )
@@ -55,27 +60,35 @@ type VirgilHttpClient struct {
 	Address string
 }
 
-func (vc *VirgilHttpClient) Send(method string, token string, url string, payload interface{}, respObj interface{}) (headers http.Header, err error) {
+func (vc *VirgilHttpClient) Send(method string, token string, urlPath string, payload proto.Message, respObj proto.Message) (headers http.Header, err error) {
 	var body []byte
 	if payload != nil {
-		body, err = json.Marshal(payload)
+		body, err = proto.Marshal(payload)
 		if err != nil {
-			return nil, errors.Wrap(err, "VirgilHttpClient.Send: marshal payload")
+			return nil, errors.Wrap(err, "VirgilHTTPClient.Send: marshal payload")
 		}
 	}
-	req, err := http.NewRequest(method, vc.Address+url, bytes.NewReader(body))
+
+	u, err := url.Parse(vc.Address)
 	if err != nil {
-		return nil, errors.Wrap(err, "VirgilHttpClient.Send: new request")
+		return nil, errors.Wrap(err, "VirgilHTTPClient.Send: URL parse")
+	}
+
+	u.Path = path.Join(u.Path, urlPath)
+	req, err := http.NewRequest(method, u.String(), bytes.NewReader(body))
+	if err != nil {
+		return nil, errors.Wrap(err, "VirgilHTTPClient.Send: new request")
 	}
 
 	if token != "" {
-		req.Header.Add("Authorization", token)
+		req.Header.Add("AccountToken", token)
 	}
 
 	client := vc.getHttpClient()
+
 	resp, err := client.Do(req)
 	if err != nil {
-		return nil, errors.Wrap(err, "VirgilHttpClient.Send: send request")
+		return nil, errors.Wrap(err, "VirgilHTTPClient.Send: send request")
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode == http.StatusNotFound {
@@ -85,10 +98,15 @@ func (vc *VirgilHttpClient) Send(method string, token string, url string, payloa
 	if resp.StatusCode >= http.StatusOK && resp.StatusCode < http.StatusMultipleChoices {
 		if respObj != nil {
 
-			decoder := json.NewDecoder(resp.Body)
-			err = decoder.Decode(respObj)
+			body, err := ioutil.ReadAll(resp.Body)
+
 			if err != nil {
-				return nil, errors.Wrap(err, "VirgilHttpClient.Send: unmarshal response object")
+				return nil, errors.Wrap(err, "VirgilHTTPClient.Send: read body")
+			}
+
+			err = proto.Unmarshal(body, respObj)
+			if err != nil {
+				return nil, errors.Wrap(err, "VirgilHTTPClient.Send: unmarshal response object")
 			}
 		}
 		return resp.Header, nil
@@ -96,10 +114,19 @@ func (vc *VirgilHttpClient) Send(method string, token string, url string, payloa
 
 	respBody, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return nil, errors.Wrap(err, "VirgilHttpClient.Send: read response body")
+		return nil, errors.Wrap(err, "VirgilHTTPClient.Send: read response body")
 	}
 
-	return nil, errors.New(fmt.Sprintf("server returned %d %s\n", resp.StatusCode, string(respBody)))
+	if len(respBody) > 0 {
+		httpErr := &models.HttpError{}
+		err = proto.Unmarshal(respBody, httpErr)
+		if err == nil {
+
+			return nil, httpErr
+		}
+	}
+
+	return nil, fmt.Errorf("%d %s", resp.StatusCode, string(respBody))
 }
 
 func (vc *VirgilHttpClient) getHttpClient() HttpClient {

@@ -45,8 +45,14 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/passw0rd/cli/login"
+
+	"github.com/passw0rd/cli/utils"
+
+	"github.com/passw0rd/cli/models"
+
 	"github.com/passw0rd/cli/cmd/app"
-	phe "github.com/passw0rd/phe-go"
+	"github.com/passw0rd/phe-go"
 
 	"github.com/passw0rd/cli/client"
 	"github.com/pkg/errors"
@@ -72,11 +78,11 @@ func registerFunc(context *cli.Context, vcli *client.VirgilHttpClient) error {
 
 	email := context.Args().First()
 
-	req := &RegisterRequest{Email: email}
+	req := &models.RegisterRequest{Email: email}
 
-	var resp *RegisterResponse
+	resp := &models.RegisterResponse{}
 
-	_, err := vcli.Send(http.MethodPost, "", "accounts/v1/account", req, &resp)
+	_, err := vcli.Send(http.MethodPost, "", "accounts/v1/account", req, resp)
 
 	if err != nil {
 		return err
@@ -90,16 +96,18 @@ func registerFunc(context *cli.Context, vcli *client.VirgilHttpClient) error {
 	code := scanner.Text()
 
 	if code == "" {
-		fmt.Println("Your session token:", resp.Token)
+		fmt.Println("Your session url2fa:", resp.ConfirmationSessionToken)
 		return errors.New("you did not enter confirmation code. Try again with confirm command")
 	}
 
-	token, err := confirmFunc(email, resp.Token, code, vcli)
+	pwd, url2fa, err := confirmFunc(email, resp.ConfirmationSessionToken, code, vcli)
 
 	if err != nil {
-		fmt.Println("Your session token:", resp.Token)
+		fmt.Println("Your registration token:", resp.ConfirmationSessionToken)
 		return errors.Wrap(err, "error while trying to confirm account. Try again with confirm command")
 	}
+
+	fmt.Printf("Your two-factor QR code URL (Authy or Google Auth):\n%s\n", url2fa)
 
 	fmt.Println("Would you like to create a new default app and a client secret key right now? [y]")
 
@@ -108,26 +116,38 @@ func registerFunc(context *cli.Context, vcli *client.VirgilHttpClient) error {
 
 	if text == "" || text == "y" {
 
-		appName := make([]byte, 4)
-		rand.Read(appName)
+		err := login.LoginFunc(email, pwd, vcli)
 
-		id, pub, err := app.CreateFunc(token, "My_Default_App_"+hex.EncodeToString(appName), vcli)
 		if err != nil {
-			fmt.Println("something went wrong. Use your access token and try again:", token)
+			return err
+		}
+
+		token, err := utils.LoadAccessToken()
+		if err != nil {
+			return err
+		}
+
+		appName := make([]byte, 4)
+		_, err = rand.Read(appName)
+		if err != nil {
+			return err
+		}
+
+		pub, appToken, err := app.CreateFunc(token, "My_Default_App_"+hex.EncodeToString(appName), vcli)
+		if err != nil {
 			return err
 		}
 
 		fmt.Println("Your credentials:")
-		fmt.Println("access_token:", token)
-		fmt.Println("app_id:", id)
 		fmt.Println("public_key:", pub)
+		fmt.Println("access_token:", appToken)
 		key := phe.GenerateClientKey()
 		fmt.Println("secret_key:", "SK.1."+base64.StdEncoding.EncodeToString(key))
 		return nil
 	}
 
 	if resp != nil {
-		fmt.Println("Your registration session token:", resp.Token)
+		fmt.Println("Your registration session url2fa:", resp.ConfirmationSessionToken)
 	}
 
 	return nil
