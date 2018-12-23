@@ -35,3 +35,86 @@
  */
 
 package app
+
+import (
+	"fmt"
+	"net/http"
+
+	"github.com/passw0rd/cli/client"
+	"github.com/passw0rd/cli/login"
+	"github.com/passw0rd/cli/models"
+	"github.com/passw0rd/cli/utils"
+	"github.com/pkg/errors"
+	"gopkg.in/urfave/cli.v2"
+)
+
+func List(client *client.VirgilHttpClient) *cli.Command {
+	return &cli.Command{
+		Name:    "list",
+		Aliases: []string{"l"},
+		Usage:   "Lists your apps",
+		Action: func(context *cli.Context) (err error) {
+
+			token, err := LoadAccessTokenOrLogin(client)
+
+			if err != nil {
+				return err
+			}
+
+			var apps []*models.Application
+			for err == nil {
+				apps, err = listFunc(token, client)
+
+				if err == nil {
+					break
+				}
+
+				httpErr, ok := err.(*models.HttpError)
+
+				if ok && httpErr.Code == 40404 {
+					err = login.Do("", "", client)
+					if err != nil {
+						return err
+					}
+					token, err = utils.LoadAccessToken()
+
+				} else {
+					return err
+				}
+			}
+
+			if err != nil {
+				return err
+			}
+
+			for i, app := range apps {
+				if i > 0 {
+					fmt.Println()
+
+				}
+				fmt.Printf("=====App: %s=====\n", app.Name)
+				fmt.Println("ID:", app.Id)
+				fmt.Println("Public key:", app.PublicKey)
+				fmt.Println("Access token:", app.AppToken)
+			}
+			return nil
+		},
+	}
+}
+
+func listFunc(token string, vcli *client.VirgilHttpClient) (apps []*models.Application, err error) {
+
+	resp := &models.AccountApplicationsResponse{}
+
+	_, err = vcli.Send(http.MethodGet, token, "accounts/v1/account/applications", nil, resp)
+
+	if err != nil {
+		return
+	}
+
+	if resp != nil {
+		return resp.App, nil
+	}
+
+	return nil, errors.New("empty response")
+}

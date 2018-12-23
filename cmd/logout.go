@@ -34,83 +34,49 @@
  * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  */
 
-package demo
+package cmd
 
 import (
-	"encoding/base64"
 	"fmt"
-	"log"
+	"net/http"
 
-	"github.com/passw0rd/sdk-go"
-	"github.com/pkg/errors"
+	"github.com/passw0rd/cli/models"
+
+	"github.com/passw0rd/cli/utils"
+
+	"github.com/passw0rd/cli/client"
 	"gopkg.in/urfave/cli.v2"
 )
 
-func Verify() *cli.Command {
+func Logout(vcli *client.VirgilHttpClient) *cli.Command {
 	return &cli.Command{
-		Name:      "verify",
-		Aliases:   []string{"v"},
-		ArgsUsage: "password record",
-		Usage:     "verify password against a record",
+		Name:      "logout",
+		ArgsUsage: "logout",
+		Usage:     "Un-registers access token",
 		Action: func(context *cli.Context) error {
-			return verifyFunc(context)
+
+			token, err := utils.LoadAccessToken()
+			if err != nil {
+				return err
+			}
+
+			_, err = vcli.Send(http.MethodPost, token, "accounts/v1/logout", nil, nil)
+
+			ok := true
+			var httpError *models.HttpError
+			if err != nil {
+				httpError, ok = err.(*models.HttpError)
+				ok = ok && httpError.Code == 40404
+			}
+
+			if err == nil || ok {
+				err = utils.DeleteAccessToken()
+				if err == nil {
+					fmt.Println("Logout ok")
+					return nil
+				}
+			}
+			return err
 		},
 	}
-}
-func verifyFunc(context *cli.Context) error {
-
-	if context.NArg() < 2 {
-		return errors.New("invalid number of arguments")
-	}
-
-	token := context.String("access_token")
-	appId := context.String("app_id")
-	pub := context.String("pk")
-	sk := context.String("sk")
-	pwd := context.Args().First()
-	recStr := context.Args().Get(1)
-
-	if token == "" {
-		log.Fatal("please specify your access token")
-	}
-	if appId == "" {
-		log.Fatal("please specify app id")
-	}
-	if pub == "" {
-		log.Fatal("please specify server public key")
-	}
-	if sk == "" {
-		log.Fatal("please specify your secret key")
-	}
-	if pwd == "" {
-		log.Fatal("please specify your password")
-	}
-
-	if pwd == "" {
-		log.Fatal("please specify record")
-	}
-
-	rec, err := base64.StdEncoding.DecodeString(recStr)
-	if err != nil {
-		return err
-	}
-
-	ctx, err := passw0rd.CreateContext(token, sk, pub, "")
-	if err != nil {
-		return err
-	}
-
-	prot, err := passw0rd.NewProtocol(ctx)
-	if err != nil {
-		return err
-	}
-
-	key, err := prot.VerifyPassword(pwd, rec)
-	if err != nil {
-		return err
-	}
-
-	fmt.Printf("Password is correct. Encryption key: %x\n", key)
-
-	return nil
 }

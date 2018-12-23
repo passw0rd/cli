@@ -51,6 +51,7 @@ func Application(client *client.VirgilHttpClient) *cli.Command {
 		Subcommands: []*cli.Command{
 			app.Create(client),
 			app.Rotate(client),
+			app.List(client),
 		},
 	}
 }

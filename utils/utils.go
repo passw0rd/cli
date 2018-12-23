@@ -40,7 +40,7 @@ import (
 	"io/ioutil"
 	"os"
 	"os/user"
-	"path"
+	"path/filepath"
 
 	"github.com/pkg/errors"
 )
@@ -52,7 +52,7 @@ func SaveAccessToken(token string) error {
 		return err
 	}
 
-	tokenPath := path.Join(u.HomeDir, ".passw0rd")
+	tokenPath := filepath.Join(u.HomeDir, ".passw0rd")
 
 	if _, err := os.Stat(tokenPath); os.IsNotExist(err) {
 		if err = os.Mkdir(tokenPath, 700); err != nil {
@@ -60,7 +60,7 @@ func SaveAccessToken(token string) error {
 		}
 	}
 
-	tokenPath = path.Join(tokenPath, "token")
+	tokenPath = filepath.Join(tokenPath, "token")
 
 	if err = ioutil.WriteFile(tokenPath, []byte(token), 600); err != nil {
 		return err
@@ -74,18 +74,34 @@ func LoadAccessToken() (token string, err error) {
 		return "", err
 	}
 
-	tokenPath := path.Join(u.HomeDir, ".passw0rd")
+	tokenPath := filepath.Join(u.HomeDir, ".passw0rd")
 
 	if _, err := os.Stat(tokenPath); os.IsNotExist(err) {
 		return "", errors.New("access token folder does not exist")
 	}
 
-	tokenPath = path.Join(tokenPath, "token")
+	tokenPath = filepath.Join(tokenPath, "token")
 
 	if token, err := ioutil.ReadFile(tokenPath); err != nil {
 		return "", err
 	} else {
 		return string(token), nil
 	}
+}
 
+func DeleteAccessToken() error {
+	u, err := user.Current()
+	if err != nil {
+		return err
+	}
+
+	tokenPath := filepath.Join(u.HomeDir, ".passw0rd")
+
+	if _, err := os.Stat(tokenPath); os.IsNotExist(err) {
+		return errors.New(".passw0rd directory does not exist")
+	}
+
+	tokenPath = filepath.Join(tokenPath, "token")
+
+	return os.Remove(tokenPath)
 }

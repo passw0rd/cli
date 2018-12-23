@@ -60,7 +60,7 @@ type VirgilHttpClient struct {
 	Address string
 }
 
-func (vc *VirgilHttpClient) Send(method string, token string, urlPath string, payload proto.Message, respObj proto.Message) (headers http.Header, err error) {
+func (vc *VirgilHttpClient) Send(method string, token string, urlPath string, payload proto.Message, respObj proto.Message, extraOptions ...interface{}) (headers http.Header, err error) {
 	var body []byte
 	if payload != nil {
 		body, err = proto.Marshal(payload)
@@ -84,6 +84,13 @@ func (vc *VirgilHttpClient) Send(method string, token string, urlPath string, pa
 		req.Header.Add("AccountToken", token)
 	}
 
+	if len(extraOptions) > 0 {
+		appToken, ok := extraOptions[0].(string)
+		if ok {
+			req.Header.Add("AppToken", appToken)
+		}
+	}
+
 	client := vc.getHttpClient()
 
 	resp, err := client.Do(req)
@@ -91,9 +98,6 @@ func (vc *VirgilHttpClient) Send(method string, token string, urlPath string, pa
 		return nil, errors.Wrap(err, "VirgilHTTPClient.Send: send request")
 	}
 	defer resp.Body.Close()
-	if resp.StatusCode == http.StatusNotFound {
-		return nil, errors.New("not found")
-	}
 
 	if resp.StatusCode >= http.StatusOK && resp.StatusCode < http.StatusMultipleChoices {
 		if respObj != nil {

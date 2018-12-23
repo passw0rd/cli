@@ -41,6 +41,8 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/passw0rd/cli/login"
+
 	"github.com/passw0rd/cli/utils"
 
 	"github.com/passw0rd/cli/models"
@@ -54,24 +56,44 @@ func Create(client *client.VirgilHttpClient) *cli.Command {
 	return &cli.Command{
 		Name:      "create",
 		Aliases:   []string{"c"},
-		ArgsUsage: "email app_name",
+		ArgsUsage: "app_name",
 		Usage:     "Create a new app",
-		Action: func(context *cli.Context) error {
+		Action: func(context *cli.Context) (err error) {
 
-			if context.NArg() < 2 {
+			if context.NArg() < 1 {
 				return errors.New("invalid number of arguments")
 			}
 
-			context.Args().First()
-			name := context.Args().Get(1)
+			name := context.Args().First()
 
-			token, err := utils.LoadAccessToken()
+			token, err := LoadAccessTokenOrLogin(client)
 
 			if err != nil {
 				return err
 			}
 
-			pub, appToken, err := CreateFunc(token, name, client)
+			var pub, appToken string
+			for err == nil {
+
+				pub, appToken, err = CreateFunc(token, name, client)
+
+				if err == nil {
+					break
+				}
+
+				httpErr, ok := err.(*models.HttpError)
+
+				if ok && httpErr.Code == 40404 {
+					err = login.Do("", "", client)
+					if err != nil {
+						return err
+					}
+					token, err = utils.LoadAccessToken()
+
+				} else {
+					return err
+				}
+			}
 
 			if err != nil {
 				return err
@@ -84,6 +106,19 @@ func Create(client *client.VirgilHttpClient) *cli.Command {
 		},
 	}
 }
+
+func LoadAccessTokenOrLogin(vcli *client.VirgilHttpClient) (token string, err error) {
+	token, err = utils.LoadAccessToken()
+	if err != nil {
+		err = login.Do("", "", vcli)
+		if err != nil {
+			return "", err
+		}
+		return utils.LoadAccessToken()
+	}
+	return
+}
+
 func CreateFunc(token, name string, vcli *client.VirgilHttpClient) (publicKey, appToken string, err error) {
 
 	req := &models.CreateAppRequest{Name: name}

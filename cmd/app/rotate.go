@@ -37,7 +37,15 @@
 package app
 
 import (
+	"encoding/base64"
+	"fmt"
+	"net/http"
+
 	"github.com/passw0rd/cli/client"
+	"github.com/passw0rd/cli/login"
+	"github.com/passw0rd/cli/models"
+	"github.com/passw0rd/cli/utils"
+	"github.com/pkg/errors"
 	"gopkg.in/urfave/cli.v2"
 )
 
@@ -45,7 +53,7 @@ func Rotate(client *client.VirgilHttpClient) *cli.Command {
 	return &cli.Command{
 		Name:      "rotate",
 		Aliases:   []string{"r"},
-		ArgsUsage: "Specify access_token and app_id",
+		ArgsUsage: "rotate <app_token>",
 		Usage:     "rotate secret on server and issue an update token",
 		Action: func(context *cli.Context) error {
 			return RotateFunc(context, client)
@@ -54,34 +62,48 @@ func Rotate(client *client.VirgilHttpClient) *cli.Command {
 }
 func RotateFunc(context *cli.Context, vcli *client.VirgilHttpClient) error {
 
-	/*if context.NArg() > 0 {
+	if context.NArg() < 1 {
 		return errors.New("invalid number of arguments")
 	}
 
-	token := context.String("access_token")
-	appId := context.String("app_id")
-
-	if token == "" {
-		log.Fatal("please specify your access token")
-	}
-	if appId == "" {
-		log.Fatal("please specify your app id")
-	}
-
-	var resp *RotateResponse
-
-	_, err := vcli.Send(http.MethodPost, token, "phe/v1/"+appId+"/rotate", nil, &resp)
+	token, err := LoadAccessTokenOrLogin(vcli)
 
 	if err != nil {
 		return err
 	}
 
-	if resp != nil {
+	for err == nil {
+		err = rotateFunc(token, context.Args().First(), vcli)
+		if err == nil {
+			break
+		}
 
-		version := strconv.Itoa(resp.Version)
-		token := passw0rd.MarshalUpdateToken(resp.UpdateToken.A, resp.UpdateToken.B)
-		fmt.Println("Your update token:", "UT."+version+"."+base64.StdEncoding.EncodeToString(token))
-	}*/
+		httpErr, ok := err.(*models.HttpError)
+
+		if ok && httpErr.Code == 40404 {
+			err = login.Do("", "", vcli)
+			if err != nil {
+				return err
+			}
+			token, err = utils.LoadAccessToken()
+		} else {
+			return err
+		}
+	}
 
 	return nil
+}
+
+func rotateFunc(accountToken, appToken string, vcli *client.VirgilHttpClient) error {
+	resp := &models.UpdateTokenResponse{}
+	_, err := vcli.Send(http.MethodPost, accountToken, "phe/v1/rotate", nil, resp, appToken)
+	if err != nil {
+		return err
+	}
+	if resp != nil {
+		fmt.Printf("Your update token:\nUT.%d.%s\n", resp.Version, base64.StdEncoding.EncodeToString(resp.UpdateToken))
+		return nil
+	}
+
+	return errors.New("nil response")
 }

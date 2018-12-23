@@ -49,6 +49,11 @@ message AccountApplicationsResponse {
 	repeated Application app = 1;
 }
 
+message UpdateTokenResponse {
+	uint32 version = 1;
+	bytes update_token = 2;
+}
+
 message HttpError {
 	uint32 code = 1;
 	string message = 2;

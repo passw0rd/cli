@@ -116,7 +116,7 @@ func registerFunc(context *cli.Context, vcli *client.VirgilHttpClient) error {
 
 	if text == "" || text == "y" {
 
-		err := login.LoginFunc(email, pwd, vcli)
+		err := login.Do(email, pwd, vcli)
 
 		if err != nil {
 			return err

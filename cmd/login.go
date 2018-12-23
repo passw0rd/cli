@@ -34,83 +34,30 @@
  * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  */
 
-package demo
+package cmd
 
 import (
-	"encoding/base64"
 	"fmt"
-	"log"
 
-	"github.com/passw0rd/sdk-go"
-	"github.com/pkg/errors"
+	"github.com/passw0rd/cli/client"
+	"github.com/passw0rd/cli/login"
 	"gopkg.in/urfave/cli.v2"
 )
 
-func Verify() *cli.Command {
+func Login(client *client.VirgilHttpClient) *cli.Command {
 	return &cli.Command{
-		Name:      "verify",
-		Aliases:   []string{"v"},
-		ArgsUsage: "password record",
-		Usage:     "verify password against a record",
+		Name:      "login",
+		ArgsUsage: "login <email>",
+		Usage:     "Obtains temporary account access token",
 		Action: func(context *cli.Context) error {
-			return verifyFunc(context)
+
+			err := login.Do(context.Args().First(), "", client)
+
+			if err == nil {
+				fmt.Println("The access token was successfully obtained & saved.")
+			}
+
+			return err
 		},
 	}
-}
-func verifyFunc(context *cli.Context) error {
-
-	if context.NArg() < 2 {
-		return errors.New("invalid number of arguments")
-	}
-
-	token := context.String("access_token")
-	appId := context.String("app_id")
-	pub := context.String("pk")
-	sk := context.String("sk")
-	pwd := context.Args().First()
-	recStr := context.Args().Get(1)
-
-	if token == "" {
-		log.Fatal("please specify your access token")
-	}
-	if appId == "" {
-		log.Fatal("please specify app id")
-	}
-	if pub == "" {
-		log.Fatal("please specify server public key")
-	}
-	if sk == "" {
-		log.Fatal("please specify your secret key")
-	}
-	if pwd == "" {
-		log.Fatal("please specify your password")
-	}
-
-	if pwd == "" {
-		log.Fatal("please specify record")
-	}
-
-	rec, err := base64.StdEncoding.DecodeString(recStr)
-	if err != nil {
-		return err
-	}
-
-	ctx, err := passw0rd.CreateContext(token, sk, pub, "")
-	if err != nil {
-		return err
-	}
-
-	prot, err := passw0rd.NewProtocol(ctx)
-	if err != nil {
-		return err
-	}
-
-	key, err := prot.VerifyPassword(pwd, rec)
-	if err != nil {
-		return err
-	}
-
-	fmt.Printf("Password is correct. Encryption key: %x\n", key)
-
-	return nil
 }

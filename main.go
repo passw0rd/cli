@@ -67,11 +67,6 @@ func main() {
 			Usage:   "Yaml config file path",
 		},
 		altsrc.NewStringFlag(&cli.StringFlag{
-			Name:    "app_id",
-			Usage:   "Application ID",
-			EnvVars: []string{"PASSW0RD_APP_ID"},
-		}),
-		altsrc.NewStringFlag(&cli.StringFlag{
 			Name:    "public_key",
 			Aliases: []string{"pk"},
 			Usage:   "Service public key",
@@ -96,6 +91,8 @@ func main() {
 		Flags:   flags,
 		Commands: []*cli.Command{
 			cmd.Account(vcli),
+			cmd.Login(vcli),
+			cmd.Logout(vcli),
 			cmd.Application(vcli),
 			cmd.Keygen(),
 			cmd.Demo(),

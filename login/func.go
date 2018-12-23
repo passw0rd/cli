@@ -37,6 +37,8 @@
 package login
 
 import (
+	"bufio"
+	"fmt"
 	"net/http"
 	"os"
 
@@ -46,7 +48,18 @@ import (
 	"github.com/passw0rd/cli/utils"
 )
 
-func LoginFunc(email, password string, vcli *client.VirgilHttpClient) (err error) {
+//Do obtains temporary account access token. Email and password may be empty
+func Do(email, password string, vcli *client.VirgilHttpClient) (err error) {
+
+	if email == "" {
+		fmt.Println("Enter your email:")
+
+		scanner := bufio.NewScanner(os.Stdin)
+		scanner.Scan()
+
+		email = scanner.Text()
+	}
+
 	if password == "" {
 		pwd, err := gopass.GetPasswdPrompt("Enter account password:\n", true, os.Stdin, os.Stdout)
 		if err != nil {
