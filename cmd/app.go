@@ -52,6 +52,8 @@ func Application(client *client.VirgilHttpClient) *cli.Command {
 			app.Create(client),
 			app.Rotate(client),
 			app.List(client),
+			app.FetchUpdateToken(client),
+			app.DeleteUpdateToken(client),
 		},
 	}
 }

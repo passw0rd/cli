@@ -72,7 +72,7 @@ func Logout(vcli *client.VirgilHttpClient) *cli.Command {
 			if err == nil || ok {
 				err = utils.DeleteAccessToken()
 				if err == nil {
-					fmt.Println("Logout ok")
+					fmt.Println("Logout ok.")
 					return nil
 				}
 			}

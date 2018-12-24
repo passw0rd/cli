@@ -34,74 +34,56 @@
  * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  */
 
-package demo
+package app
 
 import (
-	"encoding/base64"
-	"encoding/hex"
 	"fmt"
-	"log"
+	"net/http"
 
-	"github.com/passw0rd/sdk-go"
+	"github.com/passw0rd/cli/client"
+	"github.com/passw0rd/cli/utils"
 	"github.com/pkg/errors"
-
 	"gopkg.in/urfave/cli.v2"
 )
 
-func Enroll() *cli.Command {
+func DeleteUpdateToken(vcli *client.VirgilHttpClient) *cli.Command {
 	return &cli.Command{
-		Name:      "enroll",
-		Aliases:   []string{"e"},
-		ArgsUsage: "password",
-		Usage:     "Gets enrollment record for a password",
-		Action: func(context *cli.Context) error {
-			return enrollFunc(context)
+		Name:      "delete-update-token",
+		Aliases:   []string{"dt"},
+		ArgsUsage: "dt <app_access_token>",
+		Usage:     "Deletes the latest update token available for this app",
+		Action: func(context *cli.Context) (err error) {
+
+			if context.NArg() < 1 {
+				return errors.New("invalid number of arguments")
+			}
+
+			token, err := LoadAccessTokenOrLogin(vcli)
+
+			if err != nil {
+				return err
+			}
+
+			for err == nil {
+				err = deleteUpdateTokenFunc(token, context.Args().First(), vcli)
+				if err == nil {
+					break
+				}
+				token, err = utils.CheckRetry(err, vcli)
+			}
+
+			if err == nil {
+				fmt.Println("Update token delete ok.")
+			}
+
+			return err
 		},
 	}
 }
-func enrollFunc(context *cli.Context) error {
 
-	if context.NArg() < 1 {
-		return errors.New("invalid number of arguments")
-	}
+func deleteUpdateTokenFunc(token, appToken string, vcli *client.VirgilHttpClient) (err error) {
 
-	token := context.String("app_token")
-	pub := context.String("pk")
-	sk := context.String("sk")
-	pwd := context.Args().First()
+	_, err = vcli.Send(http.MethodDelete, token, "phe/v1/delete-update-token", nil, nil, appToken)
 
-	if token == "" {
-		log.Fatal("please specify your application access token")
-	}
-	if pub == "" {
-		log.Fatal("please specify server public key")
-	}
-	if sk == "" {
-		log.Fatal("please specify your secret key")
-	}
-
-	ctx, err := passw0rd.CreateContext(token, sk, pub, "")
-	if err != nil {
-		return err
-	}
-
-	prot, err := passw0rd.NewProtocol(ctx)
-	if err != nil {
-		return err
-	}
-
-	if err = processServiceUrl(context, prot, token); err != nil {
-		return err
-	}
-
-	record, key, err := prot.EnrollAccount(pwd)
-	if err != nil {
-		return err
-	}
-
-	fmt.Printf("Encryption key:\n%s\n", hex.EncodeToString(key))
-
-	fmt.Printf("Record:\n%s\n", base64.StdEncoding.EncodeToString(record))
-
-	return nil
+	return err
 }

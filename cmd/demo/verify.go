@@ -63,8 +63,7 @@ func verifyFunc(context *cli.Context) error {
 		return errors.New("invalid number of arguments")
 	}
 
-	token := context.String("access_token")
-	appId := context.String("app_id")
+	token := context.String("app_token")
 	pub := context.String("pk")
 	sk := context.String("sk")
 	pwd := context.Args().First()
@@ -72,9 +71,6 @@ func verifyFunc(context *cli.Context) error {
 
 	if token == "" {
 		log.Fatal("please specify your access token")
-	}
-	if appId == "" {
-		log.Fatal("please specify app id")
 	}
 	if pub == "" {
 		log.Fatal("please specify server public key")
@@ -85,8 +81,7 @@ func verifyFunc(context *cli.Context) error {
 	if pwd == "" {
 		log.Fatal("please specify your password")
 	}
-
-	if pwd == "" {
+	if recStr == "" {
 		log.Fatal("please specify record")
 	}
 
@@ -102,6 +97,10 @@ func verifyFunc(context *cli.Context) error {
 
 	prot, err := passw0rd.NewProtocol(ctx)
 	if err != nil {
+		return err
+	}
+
+	if err = processServiceUrl(context, prot, token); err != nil {
 		return err
 	}
 

@@ -37,71 +37,29 @@
 package demo
 
 import (
-	"encoding/base64"
-	"encoding/hex"
-	"fmt"
-	"log"
+	"net/url"
+	"path"
 
 	"github.com/passw0rd/sdk-go"
 	"github.com/pkg/errors"
-
 	"gopkg.in/urfave/cli.v2"
 )
 
-func Enroll() *cli.Command {
-	return &cli.Command{
-		Name:      "enroll",
-		Aliases:   []string{"e"},
-		ArgsUsage: "password",
-		Usage:     "Gets enrollment record for a password",
-		Action: func(context *cli.Context) error {
-			return enrollFunc(context)
-		},
+func processServiceUrl(context *cli.Context, prot *passw0rd.Protocol, accessToken string) error {
+	addr := context.String("service_url")
+	if addr != "" {
+
+		u, err := url.Parse(addr)
+		if err != nil {
+			return errors.Wrap(err, "URL parse")
+		}
+
+		u.Path = path.Join(u.Path, "phe/v1")
+
+		prot.APIClient = &passw0rd.APIClient{
+			AccessToken: accessToken,
+			URL:         u.String(),
+		}
 	}
-}
-func enrollFunc(context *cli.Context) error {
-
-	if context.NArg() < 1 {
-		return errors.New("invalid number of arguments")
-	}
-
-	token := context.String("app_token")
-	pub := context.String("pk")
-	sk := context.String("sk")
-	pwd := context.Args().First()
-
-	if token == "" {
-		log.Fatal("please specify your application access token")
-	}
-	if pub == "" {
-		log.Fatal("please specify server public key")
-	}
-	if sk == "" {
-		log.Fatal("please specify your secret key")
-	}
-
-	ctx, err := passw0rd.CreateContext(token, sk, pub, "")
-	if err != nil {
-		return err
-	}
-
-	prot, err := passw0rd.NewProtocol(ctx)
-	if err != nil {
-		return err
-	}
-
-	if err = processServiceUrl(context, prot, token); err != nil {
-		return err
-	}
-
-	record, key, err := prot.EnrollAccount(pwd)
-	if err != nil {
-		return err
-	}
-
-	fmt.Printf("Encryption key:\n%s\n", hex.EncodeToString(key))
-
-	fmt.Printf("Record:\n%s\n", base64.StdEncoding.EncodeToString(record))
-
 	return nil
 }

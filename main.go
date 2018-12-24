@@ -74,6 +74,12 @@ func main() {
 			EnvVars: []string{"PASSW0RD_SECRET"},
 		}),
 		altsrc.NewStringFlag(&cli.StringFlag{
+			Name:    "app_token",
+			Aliases: []string{"at"},
+			Usage:   "Application token",
+			EnvVars: []string{"PASSW0RD_APP_TOKEN"},
+		}),
+		altsrc.NewStringFlag(&cli.StringFlag{
 			Name:    "service_url",
 			Aliases: []string{"url"},
 			Usage:   "Passw0rd service URL",

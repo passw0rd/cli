@@ -55,7 +55,7 @@ func Login(client *client.VirgilHttpClient) *cli.Command {
 			err := utils.Login(context.Args().First(), "", client)
 
 			if err == nil {
-				fmt.Println("The account access token was successfully obtained & saved.")
+				fmt.Println("Login ok.")
 			}
 
 			return err
