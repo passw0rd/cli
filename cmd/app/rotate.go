@@ -42,7 +42,6 @@ import (
 	"net/http"
 
 	"github.com/passw0rd/cli/client"
-	"github.com/passw0rd/cli/login"
 	"github.com/passw0rd/cli/models"
 	"github.com/passw0rd/cli/utils"
 	"github.com/pkg/errors"
@@ -77,18 +76,7 @@ func RotateFunc(context *cli.Context, vcli *client.VirgilHttpClient) error {
 		if err == nil {
 			break
 		}
-
-		httpErr, ok := err.(*models.HttpError)
-
-		if ok && httpErr.Code == 40404 {
-			err = login.Do("", "", vcli)
-			if err != nil {
-				return err
-			}
-			token, err = utils.LoadAccessToken()
-		} else {
-			return err
-		}
+		token, err = utils.CheckRetry(err, vcli)
 	}
 
 	return nil

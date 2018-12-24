@@ -41,21 +41,20 @@ import (
 	"net/http"
 
 	"github.com/passw0rd/cli/client"
-	"github.com/passw0rd/cli/login"
 	"github.com/passw0rd/cli/models"
 	"github.com/passw0rd/cli/utils"
 	"github.com/pkg/errors"
 	"gopkg.in/urfave/cli.v2"
 )
 
-func List(client *client.VirgilHttpClient) *cli.Command {
+func List(vcli *client.VirgilHttpClient) *cli.Command {
 	return &cli.Command{
 		Name:    "list",
 		Aliases: []string{"l"},
 		Usage:   "Lists your apps",
 		Action: func(context *cli.Context) (err error) {
 
-			token, err := LoadAccessTokenOrLogin(client)
+			token, err := LoadAccessTokenOrLogin(vcli)
 
 			if err != nil {
 				return err
@@ -63,24 +62,11 @@ func List(client *client.VirgilHttpClient) *cli.Command {
 
 			var apps []*models.Application
 			for err == nil {
-				apps, err = listFunc(token, client)
-
+				apps, err = listFunc(token, vcli)
 				if err == nil {
 					break
 				}
-
-				httpErr, ok := err.(*models.HttpError)
-
-				if ok && httpErr.Code == 40404 {
-					err = login.Do("", "", client)
-					if err != nil {
-						return err
-					}
-					token, err = utils.LoadAccessToken()
-
-				} else {
-					return err
-				}
+				token, err = utils.CheckRetry(err, vcli)
 			}
 
 			if err != nil {
@@ -90,9 +76,8 @@ func List(client *client.VirgilHttpClient) *cli.Command {
 			for i, app := range apps {
 				if i > 0 {
 					fmt.Println()
-
 				}
-				fmt.Printf("=====App: %s=====\n", app.Name)
+				fmt.Printf("=====%s=====\n", app.Name)
 				fmt.Println("ID:", app.Id)
 				fmt.Println("Public key:", app.PublicKey)
 				fmt.Println("Access token:", app.AppToken)

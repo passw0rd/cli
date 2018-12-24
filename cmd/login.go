@@ -39,8 +39,9 @@ package cmd
 import (
 	"fmt"
 
+	"github.com/passw0rd/cli/utils"
+
 	"github.com/passw0rd/cli/client"
-	"github.com/passw0rd/cli/login"
 	"gopkg.in/urfave/cli.v2"
 )
 
@@ -51,10 +52,10 @@ func Login(client *client.VirgilHttpClient) *cli.Command {
 		Usage:     "Obtains temporary account access token",
 		Action: func(context *cli.Context) error {
 
-			err := login.Do(context.Args().First(), "", client)
+			err := utils.Login(context.Args().First(), "", client)
 
 			if err == nil {
-				fmt.Println("The access token was successfully obtained & saved.")
+				fmt.Println("The account access token was successfully obtained & saved.")
 			}
 
 			return err

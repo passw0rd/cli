@@ -88,11 +88,11 @@ func Confirm(client *client.VirgilHttpClient) *cli.Command {
 }
 func confirmFunc(email, sessionToken, confirmationCode string, vcli *client.VirgilHttpClient) (password, qrUrl string, err error) {
 
-	pwd, err := gopass.GetPasswdPrompt("Enter account password:\n", true, os.Stdin, os.Stdout)
+	pwd, err := gopass.GetPasswdPrompt("Enter account password:\n", false, os.Stdin, os.Stdout)
 	if err != nil {
 		return
 	}
-	pwdAgain, err := gopass.GetPasswdPrompt("Again:\n", true, os.Stdin, os.Stdout)
+	pwdAgain, err := gopass.GetPasswdPrompt("Again:\n", false, os.Stdin, os.Stdout)
 	if err != nil {
 		return
 	}

@@ -55,11 +55,6 @@ var (
 )
 
 func main() {
-
-	vcli := &client.VirgilHttpClient{
-		Address: "https://dev.passw0rd.io/",
-	}
-
 	flags := []cli.Flag{
 		&cli.StringFlag{
 			Name:    "config",
@@ -78,10 +73,21 @@ func main() {
 			Usage:   "Client secret key",
 			EnvVars: []string{"PASSW0RD_SECRET"},
 		}),
+		altsrc.NewStringFlag(&cli.StringFlag{
+			Name:    "service_url",
+			Aliases: []string{"url"},
+			Usage:   "Passw0rd service URL",
+			EnvVars: []string{"PASSW0RD_URL"},
+			Hidden:  true,
+		}),
 	}
 
 	if commit != "none" {
 		commit = commit[:8]
+	}
+
+	vcli := &client.VirgilHttpClient{
+		Address: "https://api.passw0rd.io/",
 	}
 
 	app := &cli.App{
@@ -98,6 +104,12 @@ func main() {
 			cmd.Demo(),
 		},
 		Before: func(c *cli.Context) error {
+
+			url := c.String("service_url")
+			if url != "" {
+				vcli.Address = url
+			}
+
 			if _, err := os.Stat(c.String("config")); os.IsNotExist(err) {
 				return nil
 			}

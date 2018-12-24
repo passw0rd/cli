@@ -41,8 +41,6 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/passw0rd/cli/login"
-
 	"github.com/passw0rd/cli/utils"
 
 	"github.com/passw0rd/cli/models"
@@ -52,7 +50,7 @@ import (
 	"gopkg.in/urfave/cli.v2"
 )
 
-func Create(client *client.VirgilHttpClient) *cli.Command {
+func Create(vcli *client.VirgilHttpClient) *cli.Command {
 	return &cli.Command{
 		Name:      "create",
 		Aliases:   []string{"c"},
@@ -66,7 +64,7 @@ func Create(client *client.VirgilHttpClient) *cli.Command {
 
 			name := context.Args().First()
 
-			token, err := LoadAccessTokenOrLogin(client)
+			token, err := LoadAccessTokenOrLogin(vcli)
 
 			if err != nil {
 				return err
@@ -74,25 +72,11 @@ func Create(client *client.VirgilHttpClient) *cli.Command {
 
 			var pub, appToken string
 			for err == nil {
-
-				pub, appToken, err = CreateFunc(token, name, client)
-
+				pub, appToken, err = CreateFunc(token, name, vcli)
 				if err == nil {
 					break
 				}
-
-				httpErr, ok := err.(*models.HttpError)
-
-				if ok && httpErr.Code == 40404 {
-					err = login.Do("", "", client)
-					if err != nil {
-						return err
-					}
-					token, err = utils.LoadAccessToken()
-
-				} else {
-					return err
-				}
+				token, err = utils.CheckRetry(err, vcli)
 			}
 
 			if err != nil {
@@ -110,7 +94,7 @@ func Create(client *client.VirgilHttpClient) *cli.Command {
 func LoadAccessTokenOrLogin(vcli *client.VirgilHttpClient) (token string, err error) {
 	token, err = utils.LoadAccessToken()
 	if err != nil {
-		err = login.Do("", "", vcli)
+		err = utils.Login("", "", vcli)
 		if err != nil {
 			return "", err
 		}

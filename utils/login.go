@@ -34,7 +34,7 @@
  * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  */
 
-package login
+package utils
 
 import (
 	"bufio"
@@ -45,11 +45,10 @@ import (
 	"github.com/howeyc/gopass"
 	"github.com/passw0rd/cli/client"
 	"github.com/passw0rd/cli/models"
-	"github.com/passw0rd/cli/utils"
 )
 
-//Do obtains temporary account access token. Email and password may be empty
-func Do(email, password string, vcli *client.VirgilHttpClient) (err error) {
+//Login obtains temporary account access token. Email and password may be empty
+func Login(email, password string, vcli *client.VirgilHttpClient) (err error) {
 
 	if email == "" {
 		fmt.Println("Enter your email:")
@@ -61,7 +60,7 @@ func Do(email, password string, vcli *client.VirgilHttpClient) (err error) {
 	}
 
 	if password == "" {
-		pwd, err := gopass.GetPasswdPrompt("Enter account password:\n", true, os.Stdin, os.Stdout)
+		pwd, err := gopass.GetPasswdPrompt("Enter account password:\n", false, os.Stdin, os.Stdout)
 		if err != nil {
 			return err
 		}
@@ -87,5 +86,5 @@ func Do(email, password string, vcli *client.VirgilHttpClient) (err error) {
 		return err
 	}
 
-	return utils.SaveAccessToken(resp.AccountToken)
+	return SaveAccessToken(resp.AccountToken)
 }

@@ -45,8 +45,6 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/passw0rd/cli/login"
-
 	"github.com/passw0rd/cli/utils"
 
 	"github.com/passw0rd/cli/models"
@@ -116,7 +114,7 @@ func registerFunc(context *cli.Context, vcli *client.VirgilHttpClient) error {
 
 	if text == "" || text == "y" {
 
-		err := login.Do(email, pwd, vcli)
+		err := utils.Login(email, pwd, vcli)
 
 		if err != nil {
 			return err
