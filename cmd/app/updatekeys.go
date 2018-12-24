@@ -34,27 +34,63 @@
  * Lead Maintainer: Virgil Security Inc. <support@virgilsecurity.com>
  */
 
-package cmd
+package app
 
 import (
-	"github.com/passw0rd/cli/client"
-	"github.com/passw0rd/cli/cmd/app"
+	"encoding/base64"
+	"fmt"
+
+	"github.com/passw0rd/phe-go"
+	"github.com/passw0rd/sdk-go"
+	"github.com/pkg/errors"
 	"gopkg.in/urfave/cli.v2"
 )
 
-func Application(client *client.VirgilHttpClient) *cli.Command {
+func UpdateKeys() *cli.Command {
 	return &cli.Command{
-		Name:      "application",
-		Aliases:   []string{"app"},
-		ArgsUsage: "app",
-		Usage:     "Manage your applications",
-		Subcommands: []*cli.Command{
-			app.Create(client),
-			app.Rotate(client),
-			app.List(client),
-			app.FetchUpdateToken(client),
-			app.DeleteUpdateToken(client),
-			app.UpdateKeys(),
+		Name:      "update-keys",
+		Aliases:   []string{"u"},
+		ArgsUsage: "public_key secret_key update_token",
+		Usage:     "update secret key and public key using update token",
+		Action: func(context *cli.Context) error {
+			return updateFunc(context)
 		},
 	}
+}
+func updateFunc(context *cli.Context) error {
+
+	if context.NArg() < 3 {
+		return errors.New("invalid number of arguments")
+	}
+
+	pkStr := context.Args().First()
+	skStr := context.Args().Get(1)
+	tokenStr := context.Args().Get(2)
+
+	pkVersion, pk, err := passw0rd.ParseVersionAndContent("PK", pkStr)
+	if err != nil {
+		return err
+	}
+	skVersion, sk, err := passw0rd.ParseVersionAndContent("SK", skStr)
+	if err != nil {
+		return err
+	}
+	tokenVersion, updateToken, err := passw0rd.ParseVersionAndContent("UT", tokenStr)
+
+	if err != nil {
+		return err
+	}
+
+	if (pkVersion+1) != tokenVersion || (skVersion+1) != tokenVersion {
+		return errors.New("Key version must be 1 less than token version")
+	}
+
+	newSk, newPk, err := phe.RotateClientKeys(sk, pk, updateToken)
+	if err != nil {
+		return err
+	}
+
+	fmt.Printf("New server public key:\nPK.%d.%s\nNew client private key:\nSK.%d.%s\n", tokenVersion, base64.StdEncoding.EncodeToString(newPk), tokenVersion, base64.StdEncoding.EncodeToString(newSk))
+
+	return nil
 }
