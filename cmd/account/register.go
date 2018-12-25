@@ -105,9 +105,9 @@ func registerFunc(context *cli.Context, vcli *client.VirgilHttpClient) error {
 		return errors.Wrap(err, "error while trying to confirm account. Try again with confirm command")
 	}
 
-	fmt.Printf("Your two-factor QR code URL (Authy or Google Auth):\n%s\n", url2fa)
+	fmt.Printf("\nYour two-factor QR code URL (Authy or Google Auth):\n%s\nPlease set up 2FA as you'll need it to log in.", url2fa)
 
-	fmt.Println("Would you like to create a new default app and a client secret key right now? [y]")
+	fmt.Println("Would you like to create a default app and a client secret key right now? [y]")
 
 	scanner.Scan()
 	text := scanner.Text()
@@ -131,14 +131,17 @@ func registerFunc(context *cli.Context, vcli *client.VirgilHttpClient) error {
 			return err
 		}
 
-		pub, appToken, err := app.CreateFunc(token, "My_Default_App_"+hex.EncodeToString(appName), vcli)
+		name := fmt.Sprintf("Passw0rd_App_%s", hex.EncodeToString(appName))
+
+		pub, appToken, err := app.CreateFunc(token, name, vcli)
 		if err != nil {
 			return err
 		}
 
-		fmt.Println("Your credentials:")
-		fmt.Println("public_key:", pub)
+		fmt.Println("Your app credentials:")
+		fmt.Println("Name:", name)
 		fmt.Println("access_token:", appToken)
+		fmt.Println("public_key:", pub)
 		key := phe.GenerateClientKey()
 		fmt.Println("secret_key:", "SK.1."+base64.StdEncoding.EncodeToString(key))
 		return nil
