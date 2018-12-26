@@ -60,14 +60,14 @@ func Login(email, password string, vcli *client.VirgilHttpClient) (err error) {
 	}
 
 	if password == "" {
-		pwd, err := gopass.GetPasswdPrompt("Enter account password:\n", false, os.Stdin, os.Stdout)
+		pwd, err := gopass.GetPasswdPrompt("Enter account password:\r\n", false, os.Stdin, os.Stdout)
 		if err != nil {
 			return err
 		}
 		password = string(pwd)
 	}
 
-	code, err := gopass.GetPasswdPrompt("Enter 2-factor code:\n", true, os.Stdin, os.Stdout)
+	code, err := gopass.GetPasswdPrompt("Enter 2-factor code:\r\n", true, os.Stdin, os.Stdout)
 	if err != nil {
 		return
 	}
