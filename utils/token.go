@@ -55,14 +55,14 @@ func SaveAccessToken(token string) error {
 	tokenPath := filepath.Join(u.HomeDir, ".passw0rd")
 
 	if _, err := os.Stat(tokenPath); os.IsNotExist(err) {
-		if err = os.Mkdir(tokenPath, 700); err != nil {
+		if err = os.Mkdir(tokenPath, 0700); err != nil {
 			return err
 		}
 	}
 
 	tokenPath = filepath.Join(tokenPath, "token")
 
-	if err = ioutil.WriteFile(tokenPath, []byte(token), 600); err != nil {
+	if err = ioutil.WriteFile(tokenPath, []byte(token), 0600); err != nil {
 		return err
 	}
 	return nil
