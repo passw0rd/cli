@@ -37,6 +37,7 @@
 package app
 
 import (
+	"encoding/base64"
 	"fmt"
 	"net/http"
 
@@ -78,9 +79,7 @@ func List(vcli *client.VirgilHttpClient) *cli.Command {
 					fmt.Println()
 				}
 				fmt.Printf("=====%s=====\n", app.Name)
-				fmt.Println("ID:", app.Id)
-				fmt.Println("Public key:", app.PublicKey)
-				fmt.Println("Access token:", app.AppToken)
+				fmt.Printf("Public key:\nPK.%d.%s\n", app.Version, base64.StdEncoding.EncodeToString(app.PublicKey))
 			}
 			return nil
 		},

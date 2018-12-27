@@ -103,7 +103,6 @@ func (vc *VirgilHttpClient) Send(method string, token string, urlPath string, pa
 		if respObj != nil {
 
 			body, err := ioutil.ReadAll(resp.Body)
-
 			if err != nil {
 				return nil, errors.Wrap(err, "VirgilHTTPClient.Send: read body")
 			}
