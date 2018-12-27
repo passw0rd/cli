@@ -81,7 +81,7 @@ func Confirm(client *client.VirgilHttpClient) *cli.Command {
 			if err != nil {
 				return err
 			}
-			fmt.Println("Please visit:", url2fa)
+			fmt.Printf("Your two-factor QR code url (Authy or Google auth):\n%s\nYou will need it to log in.\n", url2fa)
 			return nil
 		},
 	}

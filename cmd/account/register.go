@@ -105,7 +105,7 @@ func registerFunc(context *cli.Context, vcli *client.VirgilHttpClient) error {
 		return errors.Wrap(err, "error while trying to confirm account. Try again with confirm command")
 	}
 
-	fmt.Printf("\nYour two-factor QR code URL (Authy or Google Auth):\n%s\nPlease set up 2FA as you'll need it to log in.", url2fa)
+	fmt.Printf("\nYour two-factor QR code URL (Authy or Google Auth):\n%s\nPlease set up 2FA as you'll need it to log in.\n", url2fa)
 
 	fmt.Println("Would you like to create a default app and a client secret key right now? [y]")
 
