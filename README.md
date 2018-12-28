@@ -54,7 +54,7 @@ The examples below are given for the FreeBSD/Linux/Mac OS platforms.
 ```
 You have to confirm your account by entering a confirmation code you got in the email and create your account password.
 
-> !!! Once you've confirmed your account and created an account password, the password CLI immediately asks you to set up two-factor authentication and to create a new passw0rd App (with a default application name) and an `app_secret_Key`. You can:
+> !!! Once you've confirmed your account and created an account password, the passw0rd CLI immediately asks you to set up two-factor authentication and to create a new passw0rd App (with a default application name) and an `app_secret_Key`. You can:
 > - accept the offer and get all the necessary credentials (app_token, service_public_key, app_secret_key) to start working with passw0rd service or
 > - come back later. If you choose this option, you get only your `session token` - store it somewhere in a safe place. Other credentials (app_token, service_public_key, app_secret_key) you'll be able to generate using your app_token later.
 
