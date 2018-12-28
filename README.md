@@ -3,7 +3,7 @@
 [![Production](https://travis-ci.org/passw0rd/cli.svg?branch=master)](https://travis-ci.org/passw0rd/cli)
 [![GitHub license](https://img.shields.io/badge/license-BSD%203--Clause-blue.svg)](https://github.com/VirgilSecurity/virgil/blob/master/LICENSE)
 
-[Installation](#installation) | [Launching CLI](#launching-cli) | [Commands](#commands) | [Usage Examples](#usage-examples) | [Support](#support)
+[Installation](#installation) | [Launching CLI](#launching-cli) | [Commands](#commands) | [Usage Examples](#usage-examples) | [Passw0rd Demo](#passw0rd-demo) | [Support](#support)
 
 <a href="https://passw0rd.io/"><img width="260px" src="https://cdn.virgilsecurity.com/assets/images/github/logos/passw0rd.png" align="left" hspace="0" vspace="0"></a>[Virgil Security](https://virgilsecurity.com) introduces to developers a **Passw0rd CLI** – an open source tool that provides commands for interacting with the [Passw0rd Service](https://passw0rd.io/). With minimal configuration, you can start using all of the functionality provided by the Passw0rd from your favorite terminal program.
 - **Linux shells** – Use common shell programs such as Bash, Zsh, and tsch to run commands in Linux, macOS, or Unix.
@@ -40,7 +40,7 @@ Using the passw0rd CLI you can:
 To get more information, run the passw0rd CLI or its command with the `--help` or `-h` option that displays full help list and available commands.
 
 
-## Usage Example
+## Usage Examples
 The passw0rd CLI has the following usage syntax:
 `passw0rd [global options] command [command options] [arguments...]`
 
@@ -107,6 +107,7 @@ To get an update token:
 where:
 - <app_token> - is your application token.
 
+as a result you get your `update_token`.
 
 
 #### Generate a new client app_secret_key
@@ -124,7 +125,7 @@ Passw0rd CLI provides you with a Demo mode that allows you try out Passw0rd tech
 
 To start working with a Passw0rd Demo you need to have a registed passw0rd account and created application.
 
-#### Enroll User passw0rd
+#### Enroll user passw0rd
 The demo command allows you to create user's passwOrd record:
 
 ```bash
@@ -139,17 +140,38 @@ as a result, you get:
 - record - database passw0rd's record that is associated with the user.
 
 
-#### Verify User password
+#### Verify user password
 The demo command allows you to verify user password:
 ```bash
 ./passw0rd --config passw0rd.yaml demo verify user_password user_passw0rd_record
 ```
 
 where:
-- passw0rd.yaml - a config file that contains your account credentials: access_token, app_id, public_key, secret_key. This file is not created by default. So, create passw0rd.yaml file, paste your account credentials into it and specify the pass to it.
+- passw0rd.yaml - a config file that contains your account credentials: app_token, app_id, service_public_key, app_secret_key. This file is not created by default. So, create passw0rd.yaml file, paste your account credentials into it and specify the pass to it.
 - user_password - user password that he or she uses to sign in to your server side. 
 - user_passw0rd_record - database passw0rd's record that is associated with the user.
 
+As a result, you get an encryption key and information whether the password is correct or not.
+
+#### Update passw0rd record
+This function allows you to use a special updateToken to update the passw0rd record in your database.
+
+Use this flow only if your database has been COMPROMISED! When a user only needs to change his or her own password, use the `enroll` function (step 5) to replace the user's old `record` value in your database.
+
+to update user's `passw0rd record`:
+- get [your `update_token` using passw0rd CLI](https://github.com/passw0rd/cli/tree/nau11713-patch-1#get-an-update_token)
+- then use the `update token` function to create a new password_record for your users (you don't need to ask your users to create a new password because the original password is not changing, just the protected record of it in the passw0rd system).
+- then update the `record` with the following comand:
+```bash
+./passw0rd --config passw0rd.yaml demo update user_passw0rd_record update_token
+```
+
+where:
+- passw0rd.yaml - a config file that contains your account credentials: app_token, service_public_key, app_secret_key. This file is not created by default. So, create passw0rd.yaml file, paste your account credentials into it and specify the pass to it.
+- user_passw0rd_record - database passw0rd's record that is going to be updated.
+- update_token - update token that you got using the update_token comand.
+
+As a result, you get an updated user's passw0rd record.
 
 ## License
 See [LICENSE](https://github.com/VirgilSecurity/virgil-cli/tree/master/LICENSE) for details.
