@@ -32,9 +32,9 @@ passw0rd.exe
 
 ## Features
 Using the passw0rd CLI you can:
-  * register and manage your **FREE** account
+  * register and manage your **FREE** passw0rd account
   * register and manage your passw0rd application
-  * get your passw0rd App's credentials, such as: Application Token, Service Public Key, Application Secret Key
+  * get your passw0rd application credentials, such as: Application Token, Service Public Key, Application Secret Key
   * try a passw0rd Demo
 
 To get more information, run the passw0rd CLI or its command with the `--help` or `-h` option that displays full help list and available commands.
@@ -46,27 +46,27 @@ The passw0rd CLI has the following usage syntax:
 
 The examples below are given for the FreeBSD/Linux/Mac OS platforms.
 
-### Register Your Account and Set Up 2FA 
+### Register your account and set up 2FA 
 
-**First**, register your account with the following comand:
+**First**, register your account with the following command:
 ```bash
 ./passw0rd account register my@email.com
 ```
-You have to confirm your account by entering a confirmation code you got in the email and create your own account password.
+You have to confirm your account by entering a confirmation code you got in the email and create your account password.
 
-> !!! Once you've confirmed your account and created an account password, the password CLI immediately asks you to set up two factor authentication and to create a new passw0rd App (with a default App's name) and a Secret Key. You can:
-> - accept the offer and get all the necessary credentials (app_token, public_key, secret_key) to start working with passw0rd service or
-> - come back later. If you choose this option, you get only your Session url2fa - store it somewhere in a safe place. Other credentials (app_token, service_public_key, app_secret_key) you'll be able to generate using your app_token later.
+> !!! Once you've confirmed your account and created an account password, the password CLI immediately asks you to set up two-factor authentication and to create a new passw0rd App (with a default application name) and an `app_secret_Key`. You can:
+> - accept the offer and get all the necessary credentials (app_token, service_public_key, app_secret_key) to start working with passw0rd service or
+> - come back later. If you choose this option, you get only your `session token` - store it somewhere in a safe place. Other credentials (app_token, service_public_key, app_secret_key) you'll be able to generate using your app_token later.
 
-**Second**, set up two factor authentication (2FA):
-- Copy a QR link that you got in passw0rd CLI
-- Open the QR link in a brouser or some application 
+**Second**, set up two-factor authentication (2FA):
+- Copy a QR link that you got in a passw0rd CLI
+- Open the QR link in a browser or some application 
 - Scan the QR using your 2FA application
 - Enter a 2FA code into a passw0rd CLI
 
-> To set up 2FA you have to use an application that generates secure 2 step verification tokens on your device. For an exanple, you can download and install [Google Authenticator](https://support.google.com/accounts/answer/1066447?co=GENIE.Platform%3DAndroid&hl=en) or [Authy](https://authy.com/download/).  
+> To set up 2FA you have to use an application that generates secure 2 step verification tokens on your device. For example, you can download and install [Google Authenticator](https://support.google.com/accounts/answer/1066447?co=GENIE.Platform%3DAndroid&hl=en) or [Authy](https://authy.com/download/).  
 
-As a result you get your passw0rd's application credentials:
+As a result, you get your passw0rd's application credentials:
 - application `name`
 - application `app_token`
 - server `service_public_key`
@@ -76,7 +76,7 @@ As a result you get your passw0rd's application credentials:
 ### Create a new passw0rd's application
 
 To create a new passw0rd application:
-- be sure you're logged in your account. To log in the account use the following coomand (2FA is required): 
+- be sure you're logged in your account. To log in the account use the following command (2FA is required): 
 
 ```
 ./passw0rd login my@email.com
@@ -87,7 +87,7 @@ To create a new passw0rd application:
 ```
 
 where:
-- my_new_passw0rd_app - is a name of your new passw0rd application.
+- my_new_passw0rd_app - is the name of your new passw0rd application.
 
 
 ### Get an update_token
@@ -107,13 +107,13 @@ To get an update token:
 where:
 - <app_token> - is your application token.
 
-as a result you get your `update_token`.
+as a result, you get your `update_token`.
 
 
 ## Passw0rd Demo
-Passw0rd CLI provides you with a Demo mode that allows you try out Passw0rd technologies and see how the functions work without setting up a passw0rd SDK. 
+Passw0rd CLI provides you with a Demo mode that allows you to try out passw0rd technologies and see how the functions work without setting up a passw0rd SDK. 
 
-To start working with a Passw0rd Demo you need to have a registed passw0rd account and created application.
+To start working with a passw0rd Demo you need to have a registed passw0rd account and created application.
 
 #### Enroll user passw0rd
 The demo command allows you to create user's passwOrd record:
@@ -126,7 +126,7 @@ where:
 - user_password - user password that he or she uses to sign in to your server side. 
 
 as a result, you get:
-- encryption key
+- encryption key - secret key, that can be used to encrypt user data (for example, photos)
 - record - database passw0rd's record that is associated with the user.
 
 
@@ -151,7 +151,7 @@ Use this flow only if your database has been COMPROMISED! When a user only needs
 to update user's `passw0rd record`:
 - get [your `update_token` using passw0rd CLI](https://github.com/passw0rd/cli/tree/nau11713-patch-1#get-an-update_token)
 - then use the `update token` function to create a new password_record for your users (you don't need to ask your users to create a new password because the original password is not changing, just the protected record of it in the passw0rd system).
-- then update the `record` with the following comand:
+- then update the `record` with the following command:
 ```bash
 ./passw0rd --config passw0rd.yaml demo update user_passw0rd_record update_token
 ```
@@ -159,7 +159,7 @@ to update user's `passw0rd record`:
 where:
 - passw0rd.yaml - a config file that contains your account credentials: app_token, service_public_key, app_secret_key. This file is not created by default. So, create passw0rd.yaml file, paste your account credentials into it and specify the pass to it.
 - user_passw0rd_record - database passw0rd's record that is going to be updated.
-- update_token - update token that you got using the update_token comand.
+- update_token - update token that you got using the update_token command.
 
 As a result, you get an updated user's passw0rd record.
 
