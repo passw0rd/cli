@@ -30,7 +30,7 @@ passw0rd.exe
 # or just `passw0rd`
 ```
 
-## Commands
+## Features
 Using the passw0rd CLI you can:
   * register and manage your **FREE** account
   * register and manage your passw0rd application
@@ -108,16 +108,6 @@ where:
 - <app_token> - is your application token.
 
 as a result you get your `update_token`.
-
-
-#### Generate a new client app_secret_key
-
-```bash
-./passw0rd keygen
-```
-
->! Remember, it's not possible to restore a secret key at all.
-
 
 
 ## Passw0rd Demo
