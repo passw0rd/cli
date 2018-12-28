@@ -34,7 +34,7 @@ passw0rd.exe
 Using the passw0rd CLI you can:
   * register and manage your **FREE** account
   * register and manage your passw0rd application
-  * get your passw0rd App's credentials, such as: Application Token, Service Public Key, Application Secret Key.
+  * get your passw0rd App's credentials, such as: Application Token, Service Public Key, Application Secret Key
   * try a passw0rd Demo
 
 To get more information, run the passw0rd CLI or its command with the `--help` or `-h` option that displays full help list and available commands.
