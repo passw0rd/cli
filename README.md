@@ -55,12 +55,10 @@ The examples below are given for the FreeBSD/Linux/Mac OS platforms.
 You have to confirm your account by entering a confirmation code you got in the email and create your own account password.
 
 > !!! Once you've confirmed your account and created an account password, the password CLI immediately asks you to set up two factor authentication and to create a new passw0rd App (with a default App's name) and a Secret Key. You can:
-- accept the offer and get all the necessary credentials (app_token, public_key, secret_key) to start working with passw0rd service or
-- come back later. If you choose this option, you get only your Session url2fa - store it somewhere in a safe place. Other credentials (app_token, service_public_key, app_secret_key) you'll be able to generate using your app_token later.
+> - accept the offer and get all the necessary credentials (app_token, public_key, secret_key) to start working with passw0rd service or
+> - come back later. If you choose this option, you get only your Session url2fa - store it somewhere in a safe place. Other credentials (app_token, service_public_key, app_secret_key) you'll be able to generate using your app_token later.
 
-**Second**, set up two factor authentication (2FA).
-
-To set up 2FA you have to:
+**Second**, set up two factor authentication (2FA):
 - Copy a QR link that you got in passw0rd CLI
 - Open the QR link in a brouser or some application 
 - Scan the QR using your 2FA application
@@ -103,11 +101,11 @@ To get an update token:
 - then, use the `rotate` command;
 
 ```bash
-./passw0rd application rotate PT.0000000000000000000000000000000
+./passw0rd application rotate <app_token>
 ```
 
 where:
-- PT.0000000000000000000000000000000 - is your application token.
+- <app_token> - is your application token.
 
 
 
@@ -122,8 +120,9 @@ where:
 
 
 ## Passw0rd Demo
+Passw0rd CLI provides you with a Demo mode that allows you try out Passw0rd technologies and see how the functions work without setting up a passw0rd SDK. 
 
-Use next examples to try out Passw0rd technologies and see how the functions work without setting up a passw0rd SDK. 
+To start working with a Passw0rd Demo you need to have a registed passw0rd account and created application.
 
 #### Enroll User passw0rd
 The demo command allows you to create user's passwOrd record:
@@ -132,9 +131,12 @@ The demo command allows you to create user's passwOrd record:
 ./passw0rd --config passw0rd.yaml demo enroll user_password 
 ```
 where:
-- passw0rd.yaml - a config file that contains your account credentials: access_token, app_id, public_key, secret_key. This file is not created by default. So, create passw0rd.yaml file, paste your account credentials into it and specify the pass to it.
+- passw0rd.yaml - a config file that contains your account credentials: app_token, service_public_key, app_secret_key. This file is not created by default. So, create passw0rd.yaml file, paste your account credentials into it and specify the pass to it.
 - user_password - user password that he or she uses to sign in to your server side. 
-- user_passw0rd_record - database passw0rd's record that is associated with the user.
+
+as a result, you get:
+- encryption key
+- record - database passw0rd's record that is associated with the user.
 
 
 #### Verify User password
