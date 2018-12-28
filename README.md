@@ -116,7 +116,7 @@ Passw0rd CLI provides you with a Demo mode that allows you to try out passw0rd t
 To start working with a passw0rd Demo you need to have a registed passw0rd account and created application.
 
 #### Enroll user passw0rd
-The demo command allows you to create user's passwOrd record:
+The demo command allows you to create user's passw0rd record:
 
 ```bash
 ./passw0rd --config passw0rd.yaml demo enroll user_password 
