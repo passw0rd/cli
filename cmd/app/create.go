@@ -41,6 +41,8 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/passw0rd/phe-go"
+
 	"github.com/passw0rd/cli/utils"
 
 	"github.com/passw0rd/cli/models"
@@ -83,8 +85,10 @@ func Create(vcli *client.VirgilHttpClient) *cli.Command {
 				return err
 			}
 
-			fmt.Println("Your app public key:", pub)
-			fmt.Println("Your app access token:", appToken)
+			fmt.Println("app_token:", appToken)
+			fmt.Println("service_public_key:", pub)
+			key := phe.GenerateClientKey()
+			fmt.Println("app_secret_key:", "SK.1."+base64.StdEncoding.EncodeToString(key))
 
 			return nil
 		},

@@ -70,7 +70,7 @@ func verifyFunc(context *cli.Context) error {
 	recStr := context.Args().Get(1)
 
 	if token == "" {
-		log.Fatal("please specify your access token")
+		log.Fatal("please specify your application access token")
 	}
 	if pub == "" {
 		log.Fatal("please specify server public key")

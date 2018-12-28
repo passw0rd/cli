@@ -62,13 +62,13 @@ func main() {
 			Usage:   "Yaml config file path",
 		},
 		altsrc.NewStringFlag(&cli.StringFlag{
-			Name:    "public_key",
+			Name:    "service_public_key",
 			Aliases: []string{"pk"},
 			Usage:   "Service public key",
 			EnvVars: []string{"PASSW0RD_PUB"},
 		}),
 		altsrc.NewStringFlag(&cli.StringFlag{
-			Name:    "secret_key",
+			Name:    "app_secret_key",
 			Aliases: []string{"sk"},
 			Usage:   "Client secret key",
 			EnvVars: []string{"PASSW0RD_SECRET"},

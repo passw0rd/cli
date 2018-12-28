@@ -49,7 +49,7 @@ func Keygen() *cli.Command {
 		Name:      "keygen",
 		Aliases:   []string{"kg"},
 		ArgsUsage: "kg",
-		Usage:     "Generate a new passw0rd.io client secret key",
+		Usage:     "Generate a new passw0rd.io app secret key",
 		Action: func(context *cli.Context) error {
 			key := phe.GenerateClientKey()
 			fmt.Println("SK.1." + base64.StdEncoding.EncodeToString(key))

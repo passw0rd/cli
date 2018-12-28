@@ -94,7 +94,7 @@ func registerFunc(context *cli.Context, vcli *client.VirgilHttpClient) error {
 	code := scanner.Text()
 
 	if code == "" {
-		fmt.Println("Your session url2fa:", resp.ConfirmationSessionToken)
+		fmt.Println("Your session token:", resp.ConfirmationSessionToken)
 		return errors.New("you did not enter confirmation code. Try again with confirm command")
 	}
 
@@ -140,15 +140,11 @@ func registerFunc(context *cli.Context, vcli *client.VirgilHttpClient) error {
 
 		fmt.Println("Your app credentials:")
 		fmt.Println("Name:", name)
-		fmt.Println("access_token:", appToken)
-		fmt.Println("public_key:", pub)
+		fmt.Println("app_token:", appToken)
+		fmt.Println("service_public_key:", pub)
 		key := phe.GenerateClientKey()
-		fmt.Println("secret_key:", "SK.1."+base64.StdEncoding.EncodeToString(key))
+		fmt.Println("app_secret_key:", "SK.1."+base64.StdEncoding.EncodeToString(key))
 		return nil
-	}
-
-	if resp != nil {
-		fmt.Println("Your registration session url2fa:", resp.ConfirmationSessionToken)
 	}
 
 	return nil
