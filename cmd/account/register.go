@@ -85,24 +85,28 @@ func registerFunc(context *cli.Context, vcli *client.VirgilHttpClient) error {
 	if err != nil {
 		return err
 	}
-
-	fmt.Println("Enter confirmation code:")
-
 	scanner := bufio.NewScanner(os.Stdin)
-	scanner.Scan()
 
-	code := scanner.Text()
+	var code, pwd, url2fa string
+	ok := false
+	for !ok {
 
-	if code == "" {
-		fmt.Println("Your session token:", resp.ConfirmationSessionToken)
-		return errors.New("you did not enter confirmation code. Try again with confirm command")
-	}
+		fmt.Println("Enter confirmation code:")
+		scanner.Scan()
+		code = scanner.Text()
 
-	pwd, url2fa, err := confirmFunc(email, resp.ConfirmationSessionToken, code, vcli)
+		pwd, url2fa, err = confirmFunc(email, resp.ConfirmationSessionToken, code, vcli)
+		if err != nil {
+			fmt.Printf("Unable to confirm account:\n%s\nWould you like to try again? [y]\n", err)
 
-	if err != nil {
-		fmt.Println("Your registration token:", resp.ConfirmationSessionToken)
-		return errors.Wrap(err, "error while trying to confirm account. Try again with confirm command")
+			scanner.Scan()
+			text := scanner.Text()
+			if text != "" && text != "y" {
+				return err
+			}
+		} else {
+			ok = true
+		}
 	}
 
 	fmt.Printf("\nYour two-factor QR code URL (Authy or Google Auth):\n%s\nPlease set up 2FA as you'll need it to log in.\n", url2fa)
