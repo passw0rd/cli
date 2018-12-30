@@ -221,7 +221,7 @@ This function allows you to use a special `update_token` to update the passw0rd 
 Use this flow only if your database has been COMPROMISED! When a user only needs to change his or her own password, use the `enroll` function (step 5) to replace the user's old `record` value in your database.
 
 to update user's `passw0rd record`:
-- get [your `update_token` using passw0rd CLI](https://github.com/passw0rd/cli/tree/nau11713-patch-1#get-an-update_token)
+- get [your `update_token` using passw0rd CLI](https://github.com/passw0rd/cli#get-an-update_token)
 - then use the `update token` function to create a new password_record for your users (you don't need to ask your users to create a new password because the original password is not changing, just the protected record of it in the passw0rd system).
 - then update the `record` with the following command:
 ```bash
@@ -233,7 +233,16 @@ where:
 - user_passw0rd_record - database passw0rd's record that is going to be updated.
 - update_token - update token that you got using the update_token command.
 
-As a result, you get an updated user's passw0rd record.
+As a result, you get an **updated user's passw0rd record**.
+
+Then, you have to update the `app_secret_key` and `service_public_key` of your application
+
+```bash
+./passw0rd application update-keys <service_public_key> <app_secret_key> <update_token>
+```
+As a result, you get **`app_secret_key` and `service_public_key` of your application**.
+
+So, now upgrade the passw0rd.yaml file with your new application credentials and use the [verify user password](https://github.com/passw0rd/cli#verify-user-password) step to check whether the password is correct or not.
 
 ## License
 See [LICENSE](https://github.com/VirgilSecurity/virgil-cli/tree/master/LICENSE) for details.
