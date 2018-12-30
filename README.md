@@ -240,7 +240,7 @@ Then, you have to update the `app_secret_key` and `service_public_key` of your a
 ```bash
 ./passw0rd application update-keys <service_public_key> <app_secret_key> <update_token>
 ```
-As a result, you get **`app_secret_key` and `service_public_key` of your application**.
+As a result, you get **new `app_secret_key` and `service_public_key` of your application**.
 
 So, now upgrade the passw0rd.yaml file with your new application credentials and use the [verify user password](https://github.com/passw0rd/cli#verify-user-password) step to check whether the password is correct or not.
 
