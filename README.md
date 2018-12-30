@@ -176,7 +176,7 @@ This command is used to update the `app_secret_key` and `service_public_key` of 
 ./passw0rd application update-keys <service_public_key> <app_secret_key> <update_token>
 ```
 
-### Generate a secret keys
+### Generate a secret key
 This command is used to generate a new `app_secret_key`:
 ```bash
 ./passw0rd keygen
