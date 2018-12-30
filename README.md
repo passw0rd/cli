@@ -13,14 +13,14 @@
 - [Features](#features)
 - [Register your account and set up 2FA](#register-your-account-and-set-up-2FA)
 - [Commands usage](#commands-usage)
-  - [Confirm an account](#confirm-account)
+  - [Confirm an account](#confirm-an-account)
   - [Log in the account](#log-in-the-account)
   - [Log out the account](#log-out-the-account)
   - [Create a new application](#create-a-new-application)
   - [Get application list](#get-application-list)
   - [Get an update token](#get-an-update-token)
-  - [Fetch the update token](#fetch-an-update-token)
-  - [Delete the update token](#delete-an-update-token)
+  - [Fetch an update token](#fetch-an-update-token)
+  - [Delete an update token](#delete-an-update-token)
   - [Update keys](#update-keys)
   - [Generate a secret key](#generate-a-secret-key)
 - [Passw0rd Demo](#passw0rd-demo)
@@ -155,14 +155,14 @@ where:
 
 as a result, you get your `update_token`.
 
-### Fetch the update token
+### Fetch an update token
 In case you forgot your `update_token` you can fetch the latest one from the Passw0rd service using the following command:
 
 ```bash
 ./passw0rd application fetch <app_token>
 ```
 
-### Delete the update token
+### Delete an update token
 Delete the latest `update_token` available for current application:
 
 ```bash
