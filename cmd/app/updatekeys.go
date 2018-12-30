@@ -50,7 +50,7 @@ func UpdateKeys() *cli.Command {
 	return &cli.Command{
 		Name:      "update-keys",
 		Aliases:   []string{"u"},
-		ArgsUsage: "public_key secret_key update_token",
+		ArgsUsage: "public_key service_secret_key update_token",
 		Usage:     "update secret key and public key using update token",
 		Action: func(context *cli.Context) error {
 			return updateFunc(context)

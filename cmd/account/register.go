@@ -39,11 +39,14 @@ package account
 import (
 	"bufio"
 	"crypto/rand"
+	"crypto/subtle"
 	"encoding/base64"
 	"encoding/hex"
 	"fmt"
 	"net/http"
 	"os"
+
+	"github.com/howeyc/gopass"
 
 	"github.com/passw0rd/cli/utils"
 
@@ -152,4 +155,42 @@ func registerFunc(context *cli.Context, vcli *client.VirgilHttpClient) error {
 	}
 
 	return nil
+}
+
+func confirmFunc(email, sessionToken, confirmationCode string, vcli *client.VirgilHttpClient) (password, qrUrl string, err error) {
+
+	pwd, err := gopass.GetPasswdPrompt("Enter account password:\r\n", false, os.Stdin, os.Stdout)
+	if err != nil {
+		return
+	}
+	pwdAgain, err := gopass.GetPasswdPrompt("Again:\r\n", false, os.Stdin, os.Stdout)
+	if err != nil {
+		return
+	}
+
+	if subtle.ConstantTimeCompare(pwd, pwdAgain) != 1 {
+		err = errors.New("passwords do not match")
+		return
+	}
+
+	req := &models.ConfirmAccountRequest{
+		Email:                    email,
+		ConfirmationSessionToken: sessionToken,
+		ConfirmationCode:         confirmationCode,
+		Password:                 string(pwd),
+	}
+
+	resp := &models.ConfirmAccountResponse{}
+
+	_, err = vcli.Send(http.MethodPost, "", "accounts/v1/confirm-account", req, resp)
+
+	if err != nil {
+		return
+	}
+
+	if resp != nil {
+		return string(pwd), resp.QrUrl, nil
+	}
+
+	return "", "", errors.New("empty response")
 }

@@ -52,7 +52,7 @@ func FetchUpdateToken(vcli *client.VirgilHttpClient) *cli.Command {
 	return &cli.Command{
 		Name:      "fetch-update-token",
 		Aliases:   []string{"ft"},
-		ArgsUsage: "ft <app_access_token>",
+		ArgsUsage: "app_token",
 		Usage:     "Fetches the latest update token available for this app",
 		Action: func(context *cli.Context) (err error) {
 
