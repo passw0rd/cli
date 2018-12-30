@@ -13,7 +13,6 @@
 - [Features](#features)
 - [Register your account and set up 2FA](#register-your-account-and-set-up-2FA)
 - [Commands usage](#commands-usage)
-  - [Confirm an account](#confirm-an-account)
   - [Log in the account](#log-in-the-account)
   - [Log out the account](#log-out-the-account)
   - [Create a new application](#create-a-new-application)
@@ -90,16 +89,6 @@ The passw0rd CLI has the following usage syntax:
 `passw0rd [global options] command [command options] [arguments...]`
 
 The examples below are given for the FreeBSD/Linux/Mac OS platforms.
-
-### Confirm an account
-This command allows you to confirm your passw0rd account in case you didn't confirm it at the registration step.
-
-The command has the following structure:
-```bash
-./passw0rd account confirm my@email.com  <confirmation_code>
-```
-
-where `confirmation_code` is a code you got in a confirmation email at the registration step.
 
 ### Log in the account
 To log into your prefer account use the following command structure:
