@@ -2,9 +2,12 @@ language: go
 
 go: stable
 
+before_install:
+    - curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+    - dep ensure
+
 script:
   go test ./...
-
 
 deploy:
 - provider: script
