@@ -148,7 +148,7 @@ as a result, you get your `update_token`.
 In case you forgot your `update_token` you can fetch the latest one from the Passw0rd service using the following command:
 
 ```bash
-./passw0rd application fetch <app_token>
+./passw0rd application fetch-update-token <app_token>
 ```
 
 ### Delete an update token
