@@ -77,6 +77,9 @@ func updateFunc(context *cli.Context) error {
 	}
 
 	tokenVersion, updateToken, err := passw0rd.ParseVersionAndContent("UT", updateTokenStr)
+	if err != nil {
+		return err
+	}
 
 	if (recVersion + 1) != tokenVersion {
 		return errors.New("record version should be 1 less than update token version")

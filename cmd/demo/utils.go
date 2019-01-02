@@ -45,7 +45,7 @@ import (
 	"gopkg.in/urfave/cli.v2"
 )
 
-func processServiceUrl(context *cli.Context, prot *passw0rd.Protocol, appToken string) error {
+func processServiceURL(context *cli.Context, prot *passw0rd.Protocol, appToken string) error {
 	addr := context.String("service_url")
 	if addr != "" {
 

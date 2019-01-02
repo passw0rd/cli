@@ -90,7 +90,7 @@ func enrollFunc(context *cli.Context) error {
 		return err
 	}
 
-	if err = processServiceUrl(context, prot, token); err != nil {
+	if err = processServiceURL(context, prot, token); err != nil {
 		return err
 	}
 
