@@ -80,7 +80,7 @@ func enrollFunc(context *cli.Context) error {
 		log.Fatal("please specify your secret key")
 	}
 
-	ctx, err := passw0rd.CreateContext(token, sk, pub, "")
+	ctx, err := passw0rd.CreateContext(token, pub, sk, "")
 	if err != nil {
 		return err
 	}
