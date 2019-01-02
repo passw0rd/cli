@@ -45,7 +45,7 @@ import (
 	"gopkg.in/urfave/cli.v2"
 )
 
-func processServiceUrl(context *cli.Context, prot *passw0rd.Protocol, accessToken string) error {
+func processServiceUrl(context *cli.Context, prot *passw0rd.Protocol, appToken string) error {
 	addr := context.String("service_url")
 	if addr != "" {
 
@@ -57,8 +57,8 @@ func processServiceUrl(context *cli.Context, prot *passw0rd.Protocol, accessToke
 		u.Path = path.Join(u.Path, "phe/v1")
 
 		prot.APIClient = &passw0rd.APIClient{
-			AccessToken: accessToken,
-			URL:         u.String(),
+			AppToken: appToken,
+			URL:      u.String(),
 		}
 	}
 	return nil
