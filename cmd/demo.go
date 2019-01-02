@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2018 Virgil Security Inc.
+ * Copyright (C) 2015-2019 Virgil Security Inc.
  *
  * All rights reserved.
  *
@@ -43,10 +43,9 @@ import (
 
 func Demo() *cli.Command {
 	return &cli.Command{
-		Name:      "demo",
-		Aliases:   []string{"d"},
-		ArgsUsage: "demo",
-		Usage:     "Try passw0rd in action",
+		Name:    "demo",
+		Aliases: []string{"d"},
+		Usage:   "Try passw0rd in action",
 		Subcommands: []*cli.Command{
 			demo.Enroll(),
 			demo.Verify(),

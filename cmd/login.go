@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2018 Virgil Security Inc.
+ * Copyright (C) 2015-2019 Virgil Security Inc.
  *
  * All rights reserved.
  *
@@ -48,7 +48,7 @@ import (
 func Login(client *client.VirgilHttpClient) *cli.Command {
 	return &cli.Command{
 		Name:      "login",
-		ArgsUsage: "login <email>",
+		ArgsUsage: "[email]",
 		Usage:     "Obtain temporary account access token",
 		Action: func(context *cli.Context) error {
 

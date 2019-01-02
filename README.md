@@ -140,7 +140,7 @@ To get an update token:
 ```
 
 where:
-- <app_access_token> - is your application token.
+- <app_token> - is your application token.
 
 as a result, you get your `update_token`.
 

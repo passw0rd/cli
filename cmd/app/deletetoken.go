@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2018 Virgil Security Inc.
+ * Copyright (C) 2015-2019 Virgil Security Inc.
  *
  * All rights reserved.
  *
@@ -50,7 +50,7 @@ func DeleteUpdateToken(vcli *client.VirgilHttpClient) *cli.Command {
 	return &cli.Command{
 		Name:      "delete-update-token",
 		Aliases:   []string{"dt"},
-		ArgsUsage: "dt <app_access_token>",
+		ArgsUsage: "app_token",
 		Usage:     "Deletes the latest update token available for this app",
 		Action: func(context *cli.Context) (err error) {
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2018 Virgil Security Inc.
+ * Copyright (C) 2015-2019 Virgil Security Inc.
  *
  * All rights reserved.
  *
@@ -52,7 +52,7 @@ func Rotate(client *client.VirgilHttpClient) *cli.Command {
 	return &cli.Command{
 		Name:      "rotate",
 		Aliases:   []string{"r"},
-		ArgsUsage: "rotate <app_token>",
+		ArgsUsage: "app_token",
 		Usage:     "rotate secret on server and issue an update token",
 		Action: func(context *cli.Context) error {
 			return RotateFunc(context, client)

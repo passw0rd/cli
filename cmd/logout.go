@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2018 Virgil Security Inc.
+ * Copyright (C) 2015-2019 Virgil Security Inc.
  *
  * All rights reserved.
  *
@@ -50,9 +50,8 @@ import (
 
 func Logout(vcli *client.VirgilHttpClient) *cli.Command {
 	return &cli.Command{
-		Name:      "logout",
-		ArgsUsage: "logout",
-		Usage:     "Unregister account access token",
+		Name:  "logout",
+		Usage: "Unregister account access token",
 		Action: func(context *cli.Context) error {
 
 			token, err := utils.LoadAccessToken()

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2018 Virgil Security Inc.
+ * Copyright (C) 2015-2019 Virgil Security Inc.
  *
  * All rights reserved.
  *
@@ -46,10 +46,9 @@ import (
 
 func Keygen() *cli.Command {
 	return &cli.Command{
-		Name:      "keygen",
-		Aliases:   []string{"kg"},
-		ArgsUsage: "kg",
-		Usage:     "Generate a new passw0rd.io app secret key",
+		Name:    "keygen",
+		Aliases: []string{"kg"},
+		Usage:   "Generate a new passw0rd.io app secret key",
 		Action: func(context *cli.Context) error {
 			key := phe.GenerateClientKey()
 			fmt.Println("SK.1." + base64.StdEncoding.EncodeToString(key))

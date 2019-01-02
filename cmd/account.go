@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2018 Virgil Security Inc.
+ * Copyright (C) 2015-2019 Virgil Security Inc.
  *
  * All rights reserved.
  *
@@ -44,10 +44,9 @@ import (
 
 func Account(client *client.VirgilHttpClient) *cli.Command {
 	return &cli.Command{
-		Name:      "account",
-		Aliases:   []string{"acc"},
-		ArgsUsage: "acc",
-		Usage:     "Manage your account",
+		Name:    "account",
+		Aliases: []string{"acc"},
+		Usage:   "Manage your account",
 		Subcommands: []*cli.Command{
 			account.Register(client),
 		},
