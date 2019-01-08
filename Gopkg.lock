@@ -27,30 +27,30 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:b2893b6639edd4a36e9a212eed9e8ee258ea6cef11415dd50c15e87b17e27635"
+  digest = "1:14153c001dc6e0c0769741b16a21b1e1a5c22915c066d85e128219a7dddfc734"
   name = "github.com/passw0rd/phe-go"
   packages = [
     ".",
     "swu",
   ]
   pruneopts = "UT"
-  revision = "30f6cc3e9b8b178f447765987c0552bb777a5c87"
+  revision = "b187aeda5ade7c352315636c8e2ba6981855736f"
 
 [[projects]]
   branch = "master"
-  digest = "1:dd1705c523ead52b47b21c2068b0bf91871e98bafe263f1056e980d45d2e10f7"
+  digest = "1:a32890748923276548efe2edab446e7c70d5029dd69b891d7e38a04294902eb4"
   name = "github.com/passw0rd/sdk-go"
   packages = ["."]
   pruneopts = "UT"
-  revision = "65a3d102ef709e5d1ff5d1e91d53c5bc186de447"
+  revision = "e921a694c830480ba2133d0922afc583ce27a9cf"
 
 [[projects]]
-  digest = "1:40e195917a951a8bf867cd05de2a46aaf1806c50cf92eebf4c16f78cd196f747"
+  digest = "1:cf31692c14422fa27c83a05292eb5cbe0fb2775972e8f1f8446a71549bd8980b"
   name = "github.com/pkg/errors"
   packages = ["."]
   pruneopts = "UT"
-  revision = "645ef00459ed84a119197bfb8d8205042c6df63d"
-  version = "v0.8.0"
+  revision = "ba968bfe8b2f7e042a574c888954fccecfa385b4"
+  version = "v0.8.1"
 
 [[projects]]
   branch = "master"
@@ -61,18 +61,18 @@
     "ssh/terminal",
   ]
   pruneopts = "UT"
-  revision = "505ab145d0a99da450461ae2c1a9f6cd10d1f447"
+  revision = "ff983b9c42bc9fbf91556e191cc8efb585c16908"
 
 [[projects]]
   branch = "master"
-  digest = "1:10405139b45e3a97a3842c93984710e30466eb933545f219ad3f5e45246973b4"
+  digest = "1:12ef3ef293a3a3930a82e5f38a3c45a1b03a9ed72dedc192d90e89d59b1f13a5"
   name = "golang.org/x/sys"
   packages = [
     "unix",
     "windows",
   ]
   pruneopts = "UT"
-  revision = "9a3f9b0469bbc6b8802087ae5c0af9f61502de01"
+  revision = "7fbe1cd0fcc20051e1fcb87fbabec4a1bacaaeba"
 
 [[projects]]
   branch = "v2"
