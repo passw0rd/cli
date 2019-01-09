@@ -85,7 +85,7 @@ func updateFunc(context *cli.Context) error {
 		return errors.New("Key version must be 1 less than token version")
 	}
 
-	newSk, newPk, err := phe.RotateClientKeys(sk, pk, updateToken)
+	newSk, newPk, err := phe.RotateClientKeys(pk, sk, updateToken)
 	if err != nil {
 		return err
 	}
