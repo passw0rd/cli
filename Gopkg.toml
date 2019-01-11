@@ -34,11 +34,11 @@
   name = "github.com/howeyc/gopass"
 
 [[constraint]]
-  branch = "master"
+  version = "v1.0.0"
   name = "github.com/passw0rd/phe-go"
 
 [[constraint]]
-  branch = "master"
+  version = "v1.0.0"
   name = "github.com/passw0rd/sdk-go"
 
 [[constraint]]

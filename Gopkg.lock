@@ -26,23 +26,23 @@
   revision = "bf9dde6d0d2c004a008c27aaee91170c786f6db8"
 
 [[projects]]
-  branch = "master"
-  digest = "1:14153c001dc6e0c0769741b16a21b1e1a5c22915c066d85e128219a7dddfc734"
+  digest = "1:8ad4e062258dc3d193cead76f44460cfbfc19c309e1ed9f8935b8eb67d2ce077"
   name = "github.com/passw0rd/phe-go"
   packages = [
     ".",
     "swu",
   ]
   pruneopts = "UT"
-  revision = "b187aeda5ade7c352315636c8e2ba6981855736f"
+  revision = "03eb765a068b23af843a9c29592e4b31f8d9161f"
+  version = "v1.0.0"
 
 [[projects]]
-  branch = "master"
-  digest = "1:a32890748923276548efe2edab446e7c70d5029dd69b891d7e38a04294902eb4"
+  digest = "1:563c1b29d50628a7516fbfc304d5ad465f2a49adfc7ab5238796ba880a1f6abb"
   name = "github.com/passw0rd/sdk-go"
   packages = ["."]
   pruneopts = "UT"
-  revision = "e921a694c830480ba2133d0922afc583ce27a9cf"
+  revision = "6c8415a4b68ee59803d8322dc9281853ab90f36e"
+  version = "v1.0.0"
 
 [[projects]]
   digest = "1:cf31692c14422fa27c83a05292eb5cbe0fb2775972e8f1f8446a71549bd8980b"
