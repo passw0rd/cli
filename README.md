@@ -23,9 +23,9 @@
   - [Update keys](#update-keys)
   - [Generate a secret key](#generate-a-secret-key)
 - [Passw0rd Demo](#passw0rd-demo)
-  - [Enroll user passw0rd record](#enroll-user-passw0rd-record)
-  - [Verify user password](#verify-user-password)
-  - [Update user passw0rd record](#update-user-passw0rd-record)
+  - [Enroll user record](#enroll-user-record)
+  - [Verify user record](#verify-user-record)
+  - [Rotate user record](#rotate-user-record)
 - [License](#license)
 - [Support](#support)
 
@@ -176,8 +176,8 @@ Passw0rd CLI provides you with a Demo mode that allows you to try out passw0rd t
 
 To start working with a passw0rd Demo you need to have a registed passw0rd account and created application.
 
-#### Enroll user passw0rd record
-The demo command allows you to create user's passw0rd record:
+#### Enroll user record
+The demo command allows you to create user's record:
 
 ```bash
 ./passw0rd --config passw0rd.yaml demo enroll user_password
@@ -191,8 +191,8 @@ as a result, you get:
 - record - database passw0rd's record that is associated with the user.
 
 
-#### Verify user password
-The demo command allows you to verify user password:
+#### Verify user record
+The demo command allows you to verify user password with the `record`:
 ```bash
 ./passw0rd --config passw0rd.yaml demo verify user_password user_passw0rd_record
 ```
@@ -204,12 +204,12 @@ where:
 
 As a result, you get an encryption key and information whether the password is correct or not.
 
-#### Update user passw0rd record
-This function allows you to use a special `update_token` to update the passw0rd record in your database.
+#### Rotate user record
+This function allows you to use a special `update_token` to update the user's `record`.
 
 Use this flow only if your database has been COMPROMISED! When a user only needs to change his or her own password, use the `enroll` function (step 5) to replace the user's old `record` value in your database.
 
-to update user's `passw0rd record`:
+to update user's `record`:
 - get [your `update_token` using passw0rd CLI](https://github.com/passw0rd/cli#get-an-update_token)
 - then use the `update token` function to create a new password_record for your users (you don't need to ask your users to create a new password because the original password is not changing, just the protected record of it in the passw0rd system).
 - then update the `record` with the following command:
@@ -219,10 +219,10 @@ to update user's `passw0rd record`:
 
 where:
 - passw0rd.yaml - a config file that contains your account credentials: app_token, service_public_key, app_secret_key. This file is not created by default. So, create passw0rd.yaml file, paste your account credentials into it and specify the pass to it.
-- user_passw0rd_record - database passw0rd's record that is going to be updated.
+- user_passw0rd_record - database user's `record` that is going to be updated.
 - update_token - update token that you got using the update_token command.
 
-As a result, you get an **updated user's passw0rd record**.
+As a result, you get an **updated user's record**.
 
 Then, you have to update the `app_secret_key` and `service_public_key` of your application
 
