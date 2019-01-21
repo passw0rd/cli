@@ -79,7 +79,7 @@ func RotateFunc(context *cli.Context, vcli *client.VirgilHttpClient) error {
 		token, err = utils.CheckRetry(err, vcli)
 	}
 
-	return nil
+	return err
 }
 
 func rotateFunc(accountToken, appToken string, vcli *client.VirgilHttpClient) error {

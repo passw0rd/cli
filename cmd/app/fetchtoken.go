@@ -94,5 +94,5 @@ func fetchFunc(token, appToken string, vcli *client.VirgilHttpClient) (err error
 		return nil
 	}
 
-	return errors.New("no update token found.")
+	return errors.New("no update token found")
 }
